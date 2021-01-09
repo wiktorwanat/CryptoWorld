@@ -18,24 +18,39 @@ public class Cryptocurrency {
     @Id
     private String id;
     private String name;
+    private String symbol;
     private double actualPrice;
-    private double minDailyPrice;
-    private double maxDailyPrice;
+    private double marketCap;
+    private double percent_change_1h;
+    private double percent_change_24h;
+    private double percent_change_7d;
+    private double volume24h;
+    
 
     public Cryptocurrency() {
         this.id=null;
         this.name=null;
+        this.symbol=null;
         this.actualPrice=0.0;
-        this.maxDailyPrice=0.0;
-        this.minDailyPrice=0.0;
+        this.marketCap=0.0;
+        this.percent_change_1h=0.0;
+        this.percent_change_24h=0.0;
+        this.percent_change_7d=0.0;
+        this.volume24h=0.0;
     }
 
-    public Cryptocurrency( String name, double actualPrice, double minDailyPrice, double maxDailyPrice) {
+    public Cryptocurrency(String name, String symbol, double actualPrice, double marketCap, double percent_change_1h, double percent_change_24h, double percent_change_7d,double volume24h) {
+        super();
         this.name = name;
+        this.symbol = symbol;
         this.actualPrice = actualPrice;
-        this.minDailyPrice = minDailyPrice;
-        this.maxDailyPrice = maxDailyPrice;
+        this.marketCap = marketCap;
+        this.percent_change_1h = percent_change_1h;
+        this.percent_change_24h = percent_change_24h;
+        this.percent_change_7d = percent_change_7d;
+        this.volume24h=volume24h;
     }
+    
 
     public String getId() {
         return id;
@@ -62,20 +77,57 @@ public class Cryptocurrency {
         this.actualPrice = actualPrice;
     }
 
-    public double getMinDailyPrice() {
-        return minDailyPrice;
+    public String getSymbol() {
+        return symbol;
     }
 
-    public void setMinDailyPrice(double minDailyPrice) {
-        this.minDailyPrice = minDailyPrice;
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
-    public double getMaxDailyPrice() {
-        return maxDailyPrice;
+    public double getMarketCap() {
+        return marketCap;
     }
 
-    public void setMaxDailyPrice(double maxDailyPrice) {
-        this.maxDailyPrice = maxDailyPrice;
+    public void setMarketCap(double marketCap) {
+        this.marketCap = marketCap;
+    }
+
+    public double getPercent_change_1h() {
+        return percent_change_1h;
+    }
+
+    public void setPercent_change_1h(double percent_change_1h) {
+        this.percent_change_1h = percent_change_1h;
+    }
+
+    public double getPercent_change_24h() {
+        return percent_change_24h;
+    }
+
+    public void setPercent_change_24h(double percent_change_24h) {
+        this.percent_change_24h = percent_change_24h;
+    }
+
+    public double getPercent_change_7d() {
+        return percent_change_7d;
+    }
+
+    public void setPercent_change_7d(double percent_change_7d) {
+        this.percent_change_7d = percent_change_7d;
+    }
+
+    public double getVolume24h() {
+        return volume24h;
+    }
+
+    public void setVolume24h(double volume24h) {
+        this.volume24h = volume24h;
+    }
+
+    @Override
+    public String toString() {
+        return "Cryptocurrency{" + "id=" + id + ", name=" + name + ", symbol=" + symbol + ", actualPrice=" + actualPrice + ", marketCap=" + marketCap + ", percent_change_1h=" + percent_change_1h + ", percent_change_24h=" + percent_change_24h + ", percent_change_7d=" + percent_change_7d + ", volume24h=" + volume24h + '}';
     }
     
     

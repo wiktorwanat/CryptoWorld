@@ -17,6 +17,5 @@ import org.apache.http.NameValuePair;
 //CMC stand for CoinMarketCup
 public interface CMCCryptocurrencyValueController {
     
-    public String makeAPICall(List<NameValuePair> parameters)  throws URISyntaxException, IOException;
-    
+    public String makeAPICall()  throws URISyntaxException, IOException;
 }

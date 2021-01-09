@@ -5,11 +5,20 @@
  */
 package com.wwanat.CryptoWorld.Service;
 
+import com.wwanat.CryptoWorld.Model.Cryptocurrency;
+import java.util.List;
+import java.util.Optional;
+
 /**
  *
  * @author Wiktor
  */
 public interface CryptocurrencyService {
     
-    
+    Cryptocurrency createCryptocurrency(Cryptocurrency cryptocurrency) throws Exception;
+    Cryptocurrency updateCryptocurrency(Cryptocurrency cryptocurrency) throws Exception;
+    void removeCryptocurrency(String id) throws Exception;
+    List<Cryptocurrency> getAll() throws Exception;
+    Cryptocurrency getByName(String name) throws Exception;
+    Optional<Cryptocurrency> getById(String id) throws Exception;
 }
