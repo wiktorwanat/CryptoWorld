@@ -6,15 +6,12 @@
 package com.wwanat.CryptoWorld.Repository;
 
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author Wiktor
  */
-@Repository
-public interface CryptocurrencyRepository extends MongoRepository<Cryptocurrency,String>,CryptocurrencyRepositoryCustom{
+public interface CryptocurrencyRepositoryCustom {
     
-    Cryptocurrency findCryptocurrencyByName(String name);
+        Cryptocurrency findCryptocurrencyByName(String name);
 }

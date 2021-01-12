@@ -6,12 +6,15 @@
 package com.wwanat.CryptoWorld.CryptocurrienciesUpdater;
 
 import com.wwanat.CryptoWorld.CoinMarketCapController.CMCCryptocurrencyValueController;
+import com.wwanat.CryptoWorld.Controller.CryptocurrencyController;
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
 import com.wwanat.CryptoWorld.Service.CryptocurrencyService;
 import com.wwanat.CryptoWorld.Tools.JSONParser;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -23,6 +26,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class CryptocurrienciesUpdater {
     
+    final private static Logger logger = LoggerFactory.getLogger(CryptocurrienciesUpdater.class);
+    
     @Autowired
     private CryptocurrencyService cryptocurrencyService;
     
@@ -31,7 +36,7 @@ public class CryptocurrienciesUpdater {
     
     
     
-    @Scheduled(fixedDelayString = "${fixedDelay.in.milliseconds}", initialDelay = 1000)
+    @Scheduled(fixedDelayString = "${fixedDelay.in.milliseconds}", initialDelay = 10000)
     private void cryptocurrenciesDataUpdater(){
         //log4j info
         String CNCresponse="";
@@ -42,7 +47,7 @@ public class CryptocurrienciesUpdater {
                 cryptocurrencyService.updateCryptocurrency(crypto);
             }
         }catch(URISyntaxException e){
-            //log4j info soon
+            logger.warn("cryptoUpdater throws Exception", CryptocurrienciesUpdater.class);
             System.out.println(e.getMessage());
         }catch(IOException e2){
             System.out.println(e2.getMessage());
@@ -50,7 +55,6 @@ public class CryptocurrienciesUpdater {
             System.out.println(e3.getMessage());
         }
         System.out.println(CNCresponse);
-        
     }
     
 }

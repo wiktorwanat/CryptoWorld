@@ -21,4 +21,5 @@ public interface CryptocurrencyService {
     List<Cryptocurrency> getAll() throws Exception;
     Cryptocurrency getByName(String name) throws Exception;
     Optional<Cryptocurrency> getById(String id) throws Exception;
+    void removeCryptocurrencyByName(String name) throws Exception;
 }
