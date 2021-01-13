@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.wwanat.CryptoWorld.Repository;
+package com.wwanat.CryptoWorld.RepositoryImpl;
 
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
+import com.wwanat.CryptoWorld.Repository.CryptocurrencyRepositoryCustom;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

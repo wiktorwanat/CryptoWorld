@@ -7,7 +7,7 @@ package com.wwanat.CryptoWorld.ServiceImpl;
 
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
 import com.wwanat.CryptoWorld.Repository.CryptocurrencyRepository;
-import com.wwanat.CryptoWorld.Repository.CryptocurrencyRepositoryCustomImpl;
+import com.wwanat.CryptoWorld.RepositoryImpl.CryptocurrencyRepositoryCustomImpl;
 import com.wwanat.CryptoWorld.Service.CryptocurrencyService;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +31,9 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
 
     @Override
     public Cryptocurrency createCryptocurrency(Cryptocurrency cryptocurrency) throws Exception {
-        cryptocurrency=cryptocurrencyRepository.save(cryptocurrency);
-        return cryptocurrency;
+            cryptocurrency=cryptocurrencyRepository.save(cryptocurrency);
+            logger.info("Creating new ryptocurrency", cryptocurrency);
+            return cryptocurrency;
     }
 
     @Override
@@ -41,7 +42,7 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
         try{
             crypto=getByName(cryptocurrency.getName());
         }catch(Exception e){
-             logger.error("update failure", CryptocurrencyServiceImpl.class);
+             logger.error("Update failure", CryptocurrencyServiceImpl.class);
         }
         if(crypto==null){
             crypto=cryptocurrencyRepository.save(cryptocurrency);
@@ -59,15 +60,18 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
 
     @Override
     public void removeCryptocurrency(String id) throws Exception {
-        if(id==null){
-            throw new Exception("cryptocurrency id is nullable");
-        }else{
-            cryptocurrencyRepository.deleteById(id);
-        }
+            if(id==null){
+                logger.info("given Cryptocurreny id to remove is nullable",id);
+                throw new Exception("cryptocurrency id is nullable");
+            }else{
+                cryptocurrencyRepository.deleteById(id);
+                logger.info("Cryptocurreny removing succes with ocject id",id);
+            }
+
     }
 
     @Override
-    public List<Cryptocurrency> getAll() throws Exception {
+    public List<Cryptocurrency> getAll(){
         List<Cryptocurrency> cryptocurrencies=new ArrayList<Cryptocurrency>();
         cryptocurrencies=cryptocurrencyRepository.findAll();
         return cryptocurrencies;
@@ -78,8 +82,9 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
         Cryptocurrency cryptocurrency=null;
         try{
             cryptocurrency=cryptocurrencyRepository.findCryptocurrencyByName(name);
+            logger.info("GetByNameCryptocurrency method succes for name", name);
         }catch(Exception e){
-            logger.error("update failure", CryptocurrencyServiceImpl.class);
+            logger.error("getByName Service method failure", CryptocurrencyServiceImpl.class);
         }
         return cryptocurrency;
     }
@@ -96,6 +101,7 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
         cryptocurrency=getByName(name);
         if(cryptocurrency!=null){
            removeCryptocurrency(cryptocurrency.getId());
+           logger.info("removeCryptocurrencyByName Method succesly remove object with name", name);
         }
     }
     
