@@ -5,8 +5,11 @@
  */
 package com.wwanat.CryptoWorld.Controller;
 
+import com.wwanat.CryptoWorld.Service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -15,11 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api")
-public class ErrorController {
+public class UserController {
     
-    @RequestMapping(method=RequestMethod.GET,value="/error")
-    public String error(){
-        return "Somethink goes wrong";
-    }
+    final private static Logger logger = LoggerFactory.getLogger(CryptocurrencyController.class);
+
+    
+    @Autowired
+    private UserService userService;
+    
+    //@Autowired
+    //private 
     
 }

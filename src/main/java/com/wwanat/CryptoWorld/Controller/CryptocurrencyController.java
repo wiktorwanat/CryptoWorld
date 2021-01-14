@@ -60,7 +60,7 @@ public class CryptocurrencyController {
         }
     }
     
-    @RequestMapping(method=RequestMethod.DELETE,value="/cryptocurrency/{name}/delete")
+    @RequestMapping(method=RequestMethod.DELETE,value="/cryptocurrency/{name}")
     @ResponseBody
     public ResponseEntity deleteCryptocurrencyByName(@PathVariable("name") String name){
         Cryptocurrency cryptocurrency=null;

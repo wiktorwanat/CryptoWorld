@@ -8,8 +8,10 @@ package com.wwanat.CryptoWorld.Tools;
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.util.StringUtils;
 
 /**
  *
@@ -20,7 +22,8 @@ public class JSONParser {
     public static List<Cryptocurrency> fetchCryptocurrenciesFromJSONResponse(String response){
         List<Cryptocurrency> cryptocurrencyList=new ArrayList<Cryptocurrency>();
         if(response!=null && !response.isEmpty()){
-            JSONObject obj = new JSONObject(response);obj.getJSONObject("status").getInt("error_code");
+            JSONObject obj = new JSONObject(response);
+            obj.getJSONObject("status").getInt("error_code");
             if(obj.getJSONObject("status").getInt("error_code")==0){
                 JSONArray arr=obj.getJSONArray("data");
                 for(int i=0;i<arr.length();i++){
@@ -57,4 +60,6 @@ public class JSONParser {
         }
         return cryptocurrencyList;
     }
+    
+
 }
