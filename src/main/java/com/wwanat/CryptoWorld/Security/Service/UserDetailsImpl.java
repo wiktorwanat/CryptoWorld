@@ -55,6 +55,7 @@ public class UserDetailsImpl implements UserDetails{
 				authorities);
 	}
     
+    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.authorities;
@@ -69,6 +70,24 @@ public class UserDetailsImpl implements UserDetails{
     public String getUsername() {
         return this.username;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    
 
     @Override
     public boolean isAccountNonExpired() {

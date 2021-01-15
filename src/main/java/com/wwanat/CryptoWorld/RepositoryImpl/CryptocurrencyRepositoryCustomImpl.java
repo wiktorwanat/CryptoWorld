@@ -35,7 +35,7 @@ public class CryptocurrencyRepositoryCustomImpl implements CryptocurrencyReposit
         if(name!=null){
             List<Cryptocurrency> list=mongoTemplate.find(query, Cryptocurrency.class);
             if(list.size()==1){
-                logger.error("Cryptocurrency with given name "+name+" exists",CryptocurrencyRepositoryCustomImpl.class);
+                logger.info("Cryptocurrency with given name "+name+" exists",CryptocurrencyRepositoryCustomImpl.class);
                 c=list.get(0);
             }else{
                 logger.error("missing Cryptocurrency with given name",CryptocurrencyRepositoryCustomImpl.class);

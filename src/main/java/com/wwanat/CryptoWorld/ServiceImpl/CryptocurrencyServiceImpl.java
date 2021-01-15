@@ -82,7 +82,7 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
         Cryptocurrency cryptocurrency=null;
         try{
             cryptocurrency=cryptocurrencyRepository.findCryptocurrencyByName(name);
-            logger.info("GetByNameCryptocurrency method succes for name", name);
+            logger.info("GetByNameCryptocurrency method succes for name"+name, CryptocurrencyServiceImpl.class);
         }catch(Exception e){
             logger.error("getByName Service method failure", CryptocurrencyServiceImpl.class);
         }
@@ -101,7 +101,7 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
         cryptocurrency=getByName(name);
         if(cryptocurrency!=null){
            removeCryptocurrency(cryptocurrency.getId());
-           logger.info("removeCryptocurrencyByName Method succesly remove object with name", name);
+           logger.info("removeCryptocurrencyByName Method succesly remove object with name"+name, CryptocurrencyServiceImpl.class);
         }
     }
     

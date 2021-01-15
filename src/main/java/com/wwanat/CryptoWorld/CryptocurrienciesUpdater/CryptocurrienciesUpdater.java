@@ -36,9 +36,9 @@ public class CryptocurrienciesUpdater {
     
     
     
-    @Scheduled(fixedDelayString = "${fixedDelay.in.milliseconds}", initialDelay = 10000)
+    @Scheduled(fixedDelayString = "${fixedDelay.in.milliseconds}", initialDelay = 300000)
     private void cryptocurrenciesDataUpdater(){
-        //log4j info
+        
         String CNCresponse="";
         try{
             CNCresponse=coinMarketCapController.makeAPICall();
@@ -47,14 +47,16 @@ public class CryptocurrienciesUpdater {
                 cryptocurrencyService.updateCryptocurrency(crypto);
             }
         }catch(URISyntaxException e){
-            logger.warn("cryptoUpdater throws Exception", CryptocurrienciesUpdater.class);
-            System.out.println(e.getMessage());
+            logger.info("cryptoUpdater throws Exception", CryptocurrienciesUpdater.class);
+            logger.error(e.getMessage(), CryptocurrienciesUpdater.class);
         }catch(IOException e2){
-            System.out.println(e2.getMessage());
+            logger.info("cryptoUpdater throws Exception", CryptocurrienciesUpdater.class);
+            logger.error(e2.getMessage(), CryptocurrienciesUpdater.class);
         }catch(Exception e3){
-            System.out.println(e3.getMessage());
+            logger.info("cryptoUpdater throws Exception", CryptocurrienciesUpdater.class);
+            logger.error(e3.getMessage(), CryptocurrienciesUpdater.class);
         }
-        System.out.println(CNCresponse);
+        logger.info(CNCresponse,CryptocurrienciesUpdater.class);
     }
     
 }

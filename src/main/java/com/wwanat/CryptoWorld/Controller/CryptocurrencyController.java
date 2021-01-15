@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -61,6 +62,7 @@ public class CryptocurrencyController {
     }
     
     @RequestMapping(method=RequestMethod.DELETE,value="/cryptocurrency/{name}")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity deleteCryptocurrencyByName(@PathVariable("name") String name){
         Cryptocurrency cryptocurrency=null;
@@ -74,6 +76,7 @@ public class CryptocurrencyController {
     }
     
     @RequestMapping(method=RequestMethod.POST,value="/cryptocurrency/create")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity createCryptocurrency(@PathVariable Cryptocurrency cryptocurrency){
         try{
