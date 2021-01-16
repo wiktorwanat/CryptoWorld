@@ -10,6 +10,6 @@ package com.wwanat.CryptoWorld.Model;
  * @author Wiktor
  */
 public enum EnumRole {
-      USER,
-      ADMIN
+      ROLE_USER ,
+      ROLE_ADMIN
 }

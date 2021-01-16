@@ -36,6 +36,7 @@ public class CryptocurrencyController {
     private CryptocurrencyService cryptocurrencyService;
     
     @RequestMapping(method=RequestMethod.GET,value="/cryptocurrency")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity allCryptocurriencies(){
         List<Cryptocurrency> allCryptocurrencies=new ArrayList<Cryptocurrency>();
@@ -49,6 +50,7 @@ public class CryptocurrencyController {
     }
     
     @RequestMapping(method=RequestMethod.GET,value="/cryptocurrency/{name}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity getCryptocurrencyByName(@PathVariable("name") String name){
         Cryptocurrency cryptocurrency=null;

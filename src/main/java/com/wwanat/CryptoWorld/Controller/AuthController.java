@@ -90,7 +90,7 @@ public class AuthController {
             logger.error("User with given username already exists", AuthController.class);
             return ResponseEntity.badRequest().body(new MessageResponse("User with given username already exists"));
         }else{
-            User user=new User(signupRequest.getUsername(),signupRequest.getPassword(),signupRequest.getEmail());
+            User user=new User(signupRequest.getUsername(),passwordEncoder.encode(signupRequest.getPassword()),signupRequest.getEmail());
             
             Set<Role> userRoles=new HashSet();
             Set<String> requestRole=signupRequest.getRoles();
@@ -98,14 +98,14 @@ public class AuthController {
             if(requestRole!=null){
                 requestRole.forEach(role ->{
                     if(role.contains("admin")){
-                        Role admin=roleService.findByRoleName(EnumRole.ADMIN);
+                        Role admin=roleService.findByRoleName(EnumRole.ROLE_ADMIN);
                         if(admin==null){
                             throw new RuntimeException("Error: Role is not found.");
                         }else{
                            userRoles.add(admin);
                         }
-                    }else if(role.contains("user") ||role.isEmpty()){
-                        Role userRole=roleService.findByRoleName(EnumRole.USER);
+                    }else if(role.contains("user") || role.isEmpty()){
+                        Role userRole=roleService.findByRoleName(EnumRole.ROLE_USER);
                         if(userRole==null){
                             throw new RuntimeException("Error: Role is not found.");
                         }else{
@@ -114,7 +114,7 @@ public class AuthController {
                     }
                 });
             }else{
-                Role userRole=roleService.findByRoleName(EnumRole.USER);
+                Role userRole=roleService.findByRoleName(EnumRole.ROLE_USER);
                         if(userRole==null){
                             throw new RuntimeException("Error: Role is not found.");
                         }else{
