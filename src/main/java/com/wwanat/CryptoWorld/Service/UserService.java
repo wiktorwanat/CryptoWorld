@@ -5,6 +5,7 @@
  */
 package com.wwanat.CryptoWorld.Service;
 
+import com.wwanat.CryptoWorld.Model.Cryptocurrency;
 import com.wwanat.CryptoWorld.Model.User;
 import java.util.List;
 import java.util.Optional;
@@ -30,5 +31,10 @@ public interface UserService{
     void removeUser(String id);
     
     List<User> getUsers();
+    
+    List<Cryptocurrency> getUserFavouriteCryptocurrencies(String username);
+    
+    void addCryptocurrencyToFavourite(String username,String newFavouriteCryptocurrencyName);
+    
     
 }

@@ -5,7 +5,9 @@
  */
 package com.wwanat.CryptoWorld.Model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -29,6 +31,9 @@ public class User {
     
     @DBRef
     private Set<Role> roles = new HashSet<>();
+    
+    @DBRef
+    private List<Cryptocurrency> userCryptocurrency=new ArrayList<Cryptocurrency>();
 
     public User() {
     }
@@ -77,6 +82,14 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public List<Cryptocurrency> getUserCryptocurrency() {
+        return userCryptocurrency;
+    }
+
+    public void setUserCryptocurrency(List<Cryptocurrency> userCryptocurrency) {
+        this.userCryptocurrency = userCryptocurrency;
     }
     
     

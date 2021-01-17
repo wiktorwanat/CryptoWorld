@@ -31,20 +31,19 @@ public class CryptocurrencyController {
     
     final private static Logger logger = LoggerFactory.getLogger(CryptocurrencyController.class);
 
-    
     @Autowired
     private CryptocurrencyService cryptocurrencyService;
     
     @RequestMapping(method=RequestMethod.GET,value="/cryptocurrency")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity allCryptocurriencies(){
+        logger.info("Calling /api/cryptocurrency GET method",CryptocurrencyController.class); 
         List<Cryptocurrency> allCryptocurrencies=new ArrayList<Cryptocurrency>();
         try{
             allCryptocurrencies=cryptocurrencyService.getAll();
             return new ResponseEntity(allCryptocurrencies,HttpStatus.OK);
         }catch(Exception e){
-            logger.error("Server Error", e);
+            logger.error("Server Error "+ e, CryptocurrencyController.class);
             return new ResponseEntity(allCryptocurrencies,HttpStatus.valueOf(404));
         }
     }
@@ -53,12 +52,13 @@ public class CryptocurrencyController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity getCryptocurrencyByName(@PathVariable("name") String name){
+        logger.info("Calling /api/cryptocurrency/"+name+" GET method",CryptocurrencyController.class);
         Cryptocurrency cryptocurrency=null;
         try{
             cryptocurrency=cryptocurrencyService.getByName(name);
             return new ResponseEntity(cryptocurrency,HttpStatus.OK);
         }catch(Exception e){
-            logger.error("Server Error", e);
+            logger.error("Server Error "+ e, CryptocurrencyController.class);
             return new ResponseEntity(cryptocurrency,HttpStatus.valueOf(404));
         }
     }
@@ -67,12 +67,13 @@ public class CryptocurrencyController {
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity deleteCryptocurrencyByName(@PathVariable("name") String name){
+        logger.info("Calling /api/cryptocurrency/"+name+" DELETE method",CryptocurrencyController.class);
         Cryptocurrency cryptocurrency=null;
         try{
             cryptocurrencyService.removeCryptocurrencyByName(name);
             return new ResponseEntity(HttpStatus.OK);
         }catch(Exception e){
-            logger.error("Server Error", e);
+            logger.error("Server Error "+ e, CryptocurrencyController.class);
             return new ResponseEntity(cryptocurrency,HttpStatus.valueOf(404));
         }
     }
@@ -81,11 +82,12 @@ public class CryptocurrencyController {
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity createCryptocurrency(@PathVariable Cryptocurrency cryptocurrency){
+        logger.info("Calling /api/cryptocurrency/create POST method",CryptocurrencyController.class);
         try{
             cryptocurrencyService.createCryptocurrency(cryptocurrency);
             return new ResponseEntity(cryptocurrencyService.createCryptocurrency(cryptocurrency),HttpStatus.OK);
         }catch(Exception e){
-            logger.error("Server Error", e);
+            logger.error("Server Error "+ e, CryptocurrencyController.class);
             return new ResponseEntity(HttpStatus.valueOf(404));
         }
     }
