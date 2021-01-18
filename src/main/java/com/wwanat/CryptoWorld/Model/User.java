@@ -7,6 +7,7 @@ package com.wwanat.CryptoWorld.Model;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import org.springframework.data.annotation.Id;
@@ -100,6 +101,12 @@ public class User {
     public void addFavouriteCryptocurrency(Cryptocurrency cryptocurrency){
         if(cryptocurrency!=null){
             this.userCryptocurrency.add(cryptocurrency);
+        }
+    }
+    
+    public void removeFavouriteCryptocurrency(Cryptocurrency cryptocurrency){
+        if(cryptocurrency!=null){
+            this.userCryptocurrency.remove(cryptocurrency);
         }
     }
     

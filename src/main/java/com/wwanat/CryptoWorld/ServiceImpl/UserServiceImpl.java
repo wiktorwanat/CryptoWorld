@@ -142,6 +142,39 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+    @Override
+    public void removeCryptocurrencyFromFavourite(String username, String newFavouriteCryptocurrencyName) {
+        try{
+            User user=userRepository.findByUsername(username);
+            if(user!=null){
+                 System.out.println(user.toString());
+                Cryptocurrency cryptocurrencyToRemove=cryptocurrencyService.getByName(newFavouriteCryptocurrencyName);
+                if(cryptocurrencyToRemove!=null){
+                    System.out.println(cryptocurrencyToRemove.toString());
+                    List<Cryptocurrency> cryptoList=user.getUserCryptocurrency();
+                    boolean exist=false;
+                    for(Cryptocurrency c: cryptoList){
+                        if(c.getName().contains(cryptocurrencyToRemove.getName()))exist=true;
+                    }
+                    if(exist==true){
+                        user.removeFavouriteCryptocurrency(cryptocurrencyToRemove);
+                        updateUser(user);
+                        logger.info("Cryptocurrency "+newFavouriteCryptocurrencyName+" removed from "+username+" favourite list", UserServiceImpl.class);
+                    }else{
+                        logger.info("Cryptocurrency "+newFavouriteCryptocurrencyName+" is already in "+username+" favourite Cryptoucrrency list", UserServiceImpl.class);
+                    }
+                }else{
+                    logger.warn("Cryptocurrency "+newFavouriteCryptocurrencyName+" not found in db ", UserServiceImpl.class);
+                }
+            }else{
+                logger.warn("given user with username "+username+" not found" , UserServiceImpl.class);
+            }
+        }catch(Exception e){
+            logger.error("Exception thrown in removeCryptocurrencyFromFavourite method ", UserServiceImpl.class);
+        }
+    }
+
+    
     
     
 }

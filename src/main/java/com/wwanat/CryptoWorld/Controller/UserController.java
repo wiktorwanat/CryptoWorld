@@ -50,11 +50,26 @@ public class UserController {
     @RequestMapping(method=RequestMethod.POST,value="/cryptocurrency/{name}")
     @PreAuthorize("hasRole('USER')")
     @ResponseBody
-    public ResponseEntity addCRyptocurrencyToUserFavouriteLIst(@PathVariable String name){
+    public ResponseEntity addCryptocurrencyToUserFavouriteList(@PathVariable String name){
         logger.info("Calling /api/cryptocurrency/"+name+" POST method",CryptocurrencyController.class);
         try{
             String username=SecurityContextHolder.getContext().getAuthentication().getName();
             userService.addCryptocurrencyToFavourite(username,name);
+            return new ResponseEntity(HttpStatus.OK);
+        }catch(Exception e){
+            logger.error("Server Error "+ e, CryptocurrencyController.class);
+            return new ResponseEntity(HttpStatus.valueOf(404));
+        }
+    }
+    
+    @RequestMapping(method=RequestMethod.POST,value="/myCryptocurrencies/remove/{name}")
+    @PreAuthorize("hasRole('USER')")
+    @ResponseBody
+    public ResponseEntity removeCryptocurrencyFromUserFavouriteList(@PathVariable String name){
+        logger.info("Calling /api/cryptocurrency/"+name+"/removeFavourite POST method",CryptocurrencyController.class);
+        try{
+            String username=SecurityContextHolder.getContext().getAuthentication().getName();
+            userService.removeCryptocurrencyFromFavourite(username,name);
             return new ResponseEntity(HttpStatus.OK);
         }catch(Exception e){
             logger.error("Server Error "+ e, CryptocurrencyController.class);
