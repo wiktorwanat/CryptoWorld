@@ -91,7 +91,16 @@ public class User {
     public void setUserCryptocurrency(List<Cryptocurrency> userCryptocurrency) {
         this.userCryptocurrency = userCryptocurrency;
     }
+
+    @Override
+    public String toString() {
+        return "User{" + "id=" + id + ", username=" + username + ", password=" + password + ", email=" + email + ", roles=" + roles + ", userCryptocurrency=" + userCryptocurrency.size() + '}';
+    }
     
-    
+    public void addFavouriteCryptocurrency(Cryptocurrency cryptocurrency){
+        if(cryptocurrency!=null){
+            this.userCryptocurrency.add(cryptocurrency);
+        }
+    }
     
 }

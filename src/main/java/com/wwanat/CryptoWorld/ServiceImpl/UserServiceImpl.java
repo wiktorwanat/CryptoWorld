@@ -100,8 +100,14 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<Cryptocurrency> getUserFavouriteCryptocurrencies(String username) {
-        logger.info("userExistByUsername with username "+username , UserServiceImpl.class);
-        return userRepository.findByUsername(username).getUserCryptocurrency();
+        List<Cryptocurrency> userFavouriteCryptocurrencyList=new ArrayList();
+        try{
+            userFavouriteCryptocurrencyList=userRepository.findByUsername(username).getUserCryptocurrency();
+            logger.info("User "+username +" favourite Cryptocurrency list collected", UserServiceImpl.class);
+        }catch(Exception e){
+            logger.error("Exception thrown in addCryptocurrencyToFavourite method ", UserServiceImpl.class);
+        }
+        return userFavouriteCryptocurrencyList;
     }
     
     @Override
@@ -109,13 +115,22 @@ public class UserServiceImpl implements UserService{
         try{
             User user=userRepository.findByUsername(username);
             if(user!=null){
+                 System.out.println(user.toString());
                 Cryptocurrency newFavouriteCryptocurrency=cryptocurrencyService.getByName(newFavouriteCryptocurrencyName);
                 if(newFavouriteCryptocurrency!=null){
+                    System.out.println(newFavouriteCryptocurrency.toString());
                     List<Cryptocurrency> cryptoList=user.getUserCryptocurrency();
-                    cryptoList.add(newFavouriteCryptocurrency);
-                    user.setUserCryptocurrency(cryptoList);
-                    updateUser(user);
-                    logger.info("Cryptocurrency "+newFavouriteCryptocurrencyName+" added to "+username+" favourite list", UserServiceImpl.class);
+                    boolean exist=false;
+                    for(Cryptocurrency c: cryptoList){
+                        if(c.getName().contains(newFavouriteCryptocurrency.getName()))exist=true;
+                    }
+                    if(exist==false){
+                        user.addFavouriteCryptocurrency(newFavouriteCryptocurrency);
+                        updateUser(user);
+                        logger.info("Cryptocurrency "+newFavouriteCryptocurrencyName+" added to "+username+" favourite list", UserServiceImpl.class);
+                    }else{
+                        logger.info("Cryptocurrency "+newFavouriteCryptocurrencyName+" is already in "+username+" favourite Cryptoucrrency list", UserServiceImpl.class);
+                    }
                 }else{
                     logger.warn("Cryptocurrency "+newFavouriteCryptocurrencyName+" not found in db ", UserServiceImpl.class);
                 }
