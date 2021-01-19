@@ -36,7 +36,7 @@ public class CryptocurrienciesUpdater {
     
     
     
-    @Scheduled(fixedDelayString = "${fixedDelay.in.milliseconds}", initialDelay = 300000)
+    @Scheduled(fixedDelayString = "${fixedDelay.in.milliseconds}", initialDelay = 1000)
     private void cryptocurrenciesDataUpdater(){
         
         String CNCresponse="";

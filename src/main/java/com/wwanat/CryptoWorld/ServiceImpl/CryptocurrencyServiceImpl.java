@@ -74,6 +74,7 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
     public List<Cryptocurrency> getAll(){
         List<Cryptocurrency> cryptocurrencies=new ArrayList<Cryptocurrency>();
         cryptocurrencies=cryptocurrencyRepository.findAll();
+        logger.info(cryptocurrencies.size()+" cryptocurrencies collected from database");
         return cryptocurrencies;
     }
 
