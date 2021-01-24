@@ -46,15 +46,12 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
         }
         if(crypto==null){
             crypto=cryptocurrencyRepository.save(cryptocurrency);
+            logger.info("Cryptocurrency created", CryptocurrencyServiceImpl.class);
             return cryptocurrency;
         }else{
-            crypto.setActualPrice(cryptocurrency.getActualPrice());
-            crypto.setMarketCap(cryptocurrency.getMarketCap());
-            crypto.setPercent_change_1h(cryptocurrency.getPercent_change_1h());
-            crypto.setPercent_change_24h(cryptocurrency.getPercent_change_24h());
-            crypto.setPercent_change_7d(cryptocurrency.getPercent_change_7d());
-            crypto.setVolume24h(cryptocurrency.getVolume24h());
-            return cryptocurrencyRepository.save(crypto);
+            cryptocurrency.setId(crypto.getId());
+            logger.info("Cryptocurrency "+cryptocurrency.getName()+" updated", CryptocurrencyServiceImpl.class);
+            return cryptocurrencyRepository.save(cryptocurrency);
         }
     }
 
@@ -83,9 +80,8 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
         Cryptocurrency cryptocurrency=null;
         try{
             cryptocurrency=cryptocurrencyRepository.findCryptocurrencyByName(name);
-            logger.info("GetByNameCryptocurrency method succes for name"+name, CryptocurrencyServiceImpl.class);
         }catch(Exception e){
-            logger.error("getByName Service method failure", CryptocurrencyServiceImpl.class);
+            logger.error(e.getMessage(), CryptocurrencyServiceImpl.class);
         }
         return cryptocurrency;
     }

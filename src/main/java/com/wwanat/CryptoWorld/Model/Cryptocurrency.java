@@ -6,6 +6,7 @@
 package com.wwanat.CryptoWorld.Model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -19,30 +20,36 @@ public class Cryptocurrency {
     private String id;
     private String name;
     private String symbol;
+    private String slug;
     private double actualPrice;
     private double marketCap;
     private double percent_change_1h;
     private double percent_change_24h;
     private double percent_change_7d;
     private double volume24h;
+    @DBRef
+    private CryptocurrencyDetails cryptocurrencyDetails;
     
 
     public Cryptocurrency() {
         this.id=null;
         this.name=null;
         this.symbol=null;
+        this.slug=null;
         this.actualPrice=0.0;
         this.marketCap=0.0;
         this.percent_change_1h=0.0;
         this.percent_change_24h=0.0;
         this.percent_change_7d=0.0;
         this.volume24h=0.0;
+        this.cryptocurrencyDetails=null;
     }
 
-    public Cryptocurrency(String name, String symbol, double actualPrice, double marketCap, double percent_change_1h, double percent_change_24h, double percent_change_7d,double volume24h) {
+    public Cryptocurrency(String name, String symbol,String slug, double actualPrice, double marketCap, double percent_change_1h, double percent_change_24h, double percent_change_7d,double volume24h) {
         super();
         this.name = name;
         this.symbol = symbol;
+        this.slug=slug;
         this.actualPrice = actualPrice;
         this.marketCap = marketCap;
         this.percent_change_1h = percent_change_1h;
@@ -125,11 +132,25 @@ public class Cryptocurrency {
         this.volume24h = volume24h;
     }
 
+    public CryptocurrencyDetails getCryptocurrencyDetails() {
+        return cryptocurrencyDetails;
+    }
+
+    public void setCryptocurrencyDetails(CryptocurrencyDetails cryptocurrencyDetails) {
+        this.cryptocurrencyDetails = cryptocurrencyDetails;
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
+
     @Override
     public String toString() {
-        return "Cryptocurrency{" + "id=" + id + ", name=" + name + ", symbol=" + symbol + ", actualPrice=" + actualPrice + ", marketCap=" + marketCap + ", percent_change_1h=" + percent_change_1h + ", percent_change_24h=" + percent_change_24h + ", percent_change_7d=" + percent_change_7d + ", volume24h=" + volume24h + '}';
+        return "Cryptocurrency{" + "id=" + id + ", name=" + name + ", symbol=" + symbol + ", slug=" + slug + ", actualPrice=" + actualPrice + ", marketCap=" + marketCap + ", percent_change_1h=" + percent_change_1h + ", percent_change_24h=" + percent_change_24h + ", percent_change_7d=" + percent_change_7d + ", volume24h=" + volume24h + ", cryptocurrencyDetails=" + cryptocurrencyDetails + '}';
     }
-    
-    
     
 }
