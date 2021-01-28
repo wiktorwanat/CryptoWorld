@@ -45,13 +45,23 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
              logger.error("Update failure", CryptocurrencyServiceImpl.class);
         }
         if(crypto==null){
-            crypto=cryptocurrencyRepository.save(cryptocurrency);
             logger.info("Cryptocurrency created", CryptocurrencyServiceImpl.class);
-            return cryptocurrency;
-        }else{
-            cryptocurrency.setId(crypto.getId());
-            logger.info("Cryptocurrency "+cryptocurrency.getName()+" updated", CryptocurrencyServiceImpl.class);
             return cryptocurrencyRepository.save(cryptocurrency);
+        }else{
+            crypto.setName(cryptocurrency.getName());
+            crypto.setSymbol(cryptocurrency.getSymbol());
+            crypto.setActualPrice(cryptocurrency.getActualPrice());
+            crypto.setMarketCap(cryptocurrency.getMarketCap());
+            crypto.setPercent_change_1h(cryptocurrency.getPercent_change_1h());
+            crypto.setPercent_change_24h(cryptocurrency.getPercent_change_24h());
+            crypto.setPercent_change_7d(cryptocurrency.getPercent_change_7d());
+            crypto.setSlug(cryptocurrency.getSlug());
+            crypto.setVolume24h(cryptocurrency.getVolume24h());
+            if(cryptocurrency.getCryptocurrencyDetails()!=null){
+                crypto.setCryptocurrencyDetails(cryptocurrency.getCryptocurrencyDetails());
+            }
+            logger.info("Cryptocurrency "+crypto.getName()+" updated", CryptocurrencyServiceImpl.class);
+            return cryptocurrencyRepository.save(crypto);
         }
     }
 
@@ -101,9 +111,5 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
            logger.info("removeCryptocurrencyByName Method succesly remove object with name"+name, CryptocurrencyServiceImpl.class);
         }
     }
-    
-    
-    
-    
 
 }

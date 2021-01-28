@@ -66,7 +66,7 @@ public class CryptocurrienciesUpdater {
     }
     
     
-    @Scheduled(fixedDelayString="${cryptocurrenciesDataUpdater.fixedDelay.in.milliseconds}",initialDelay=60000)
+    @Scheduled(fixedDelayString="${cryptocurrenciesDetailsUpdater.fixedDelay.in.milliseconds}",initialDelay=60000)
     public void cryptocurrencyDetailsUpdater(){
         String CNCresponse="";
         List<Cryptocurrency> cryptocurrencies=new ArrayList<Cryptocurrency>();
@@ -83,7 +83,7 @@ public class CryptocurrienciesUpdater {
                         cryptocurrencyService.updateCryptocurrency(matchingCryptocurrency);
                         logger.info("Cryptocurrency "+matchingCryptocurrency.getName()+" matched with details and updated ", CryptocurrienciesUpdater.class);
                 }else{
-                    logger.warn("CryptocurrencyDetails for "+cryptocurrencyDetail.getName()+"not found any matching cryptocurrency do connect", CryptocurrienciesUpdater.class);
+                    logger.warn("CryptocurrencyDetails for "+cryptocurrencyDetail.getName()+"not found any matching cryptocurrency to connect", CryptocurrienciesUpdater.class);
                 }
             }
         }catch(URISyntaxException e){
