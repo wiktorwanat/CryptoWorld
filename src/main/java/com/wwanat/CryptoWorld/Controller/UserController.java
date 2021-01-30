@@ -5,14 +5,15 @@
  */
 package com.wwanat.CryptoWorld.Controller;
 
+import com.wwanat.CryptoWorld.Model.Cryptocurrency;
 import com.wwanat.CryptoWorld.Service.UserService;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,7 +43,9 @@ public class UserController {
         logger.info("Calling /api/myCryptocurrencies GET method",CryptocurrencyController.class);
         try{
             String username=SecurityContextHolder.getContext().getAuthentication().getName();
-            return new ResponseEntity(userService.getUserFavouriteCryptocurrencies(username),HttpStatus.OK);
+            List<Cryptocurrency> favourite=null;
+            favourite=userService.getUserFavouriteCryptocurrencies(username);
+            return new ResponseEntity(favourite,HttpStatus.OK);
         }catch(Exception e){
             logger.error("Server Error "+ e, CryptocurrencyController.class);
             return new ResponseEntity(HttpStatus.valueOf(404));

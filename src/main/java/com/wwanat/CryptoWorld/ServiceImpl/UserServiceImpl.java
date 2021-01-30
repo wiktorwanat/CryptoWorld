@@ -115,21 +115,25 @@ public class UserServiceImpl implements UserService{
         try{
             User user=userRepository.findByUsername(username);
             if(user!=null){
-                 System.out.println(user.toString());
                 Cryptocurrency newFavouriteCryptocurrency=cryptocurrencyService.getByName(newFavouriteCryptocurrencyName);
                 if(newFavouriteCryptocurrency!=null){
-                    System.out.println(newFavouriteCryptocurrency.toString());
                     List<Cryptocurrency> cryptoList=user.getUserCryptocurrency();
                     boolean exist=false;
-                    for(Cryptocurrency c: cryptoList){
-                        if(c.getName().contains(newFavouriteCryptocurrency.getName()))exist=true;
-                    }
-                    if(exist==false){
-                        user.addFavouriteCryptocurrency(newFavouriteCryptocurrency);
-                        updateUser(user);
-                        logger.info("Cryptocurrency "+newFavouriteCryptocurrencyName+" added to "+username+" favourite list", UserServiceImpl.class);
-                    }else{
-                        logger.info("Cryptocurrency "+newFavouriteCryptocurrencyName+" is already in "+username+" favourite Cryptoucrrency list", UserServiceImpl.class);
+                    if(cryptoList!=null){
+                        if(cryptoList.size()>0){
+                            for(Cryptocurrency c: cryptoList){
+                                if(c!=null){
+                                    if(c.getName().contains(newFavouriteCryptocurrency.getName())){exist=true;}
+                                }
+                            }
+                        }
+                        if(exist==false){
+                            user.getUserCryptocurrency().add(newFavouriteCryptocurrency);
+                            updateUser(user);
+                            logger.info("Cryptocurrency "+newFavouriteCryptocurrencyName+" added to "+username+" favourite list", UserServiceImpl.class);
+                        }else{
+                            logger.info("Cryptocurrency "+newFavouriteCryptocurrencyName+" is already in "+username+" favourite Cryptoucrrency list", UserServiceImpl.class);
+                        }
                     }
                 }else{
                     logger.warn("Cryptocurrency "+newFavouriteCryptocurrencyName+" not found in db ", UserServiceImpl.class);
@@ -153,8 +157,12 @@ public class UserServiceImpl implements UserService{
                     System.out.println(cryptocurrencyToRemove.toString());
                     List<Cryptocurrency> cryptoList=user.getUserCryptocurrency();
                     boolean exist=false;
-                    for(Cryptocurrency c: cryptoList){
-                        if(c.getName().contains(cryptocurrencyToRemove.getName()))exist=true;
+                    if(cryptoList!=null){
+                        for(Cryptocurrency c: cryptoList){
+                            if(c!=null){
+                                if(c.getName().contains(cryptocurrencyToRemove.getName()))exist=true;
+                            }
+                        }
                     }
                     if(exist==true){
                         user.removeFavouriteCryptocurrency(cryptocurrencyToRemove);
