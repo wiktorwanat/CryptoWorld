@@ -5,6 +5,7 @@
  */
 package com.wwanat.CryptoWorld.Model;
 
+import java.util.Objects;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -152,5 +153,49 @@ public class Cryptocurrency {
     public String toString() {
         return "Cryptocurrency{" + "id=" + id + ", name=" + name + ", symbol=" + symbol + ", slug=" + slug + ", actualPrice=" + actualPrice + ", marketCap=" + marketCap + ", percent_change_1h=" + percent_change_1h + ", percent_change_24h=" + percent_change_24h + ", percent_change_7d=" + percent_change_7d + ", volume24h=" + volume24h + ", cryptocurrencyDetails=" + cryptocurrencyDetails + '}';
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Cryptocurrency other = (Cryptocurrency) obj;
+        if (Double.doubleToLongBits(this.actualPrice) != Double.doubleToLongBits(other.actualPrice)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.marketCap) != Double.doubleToLongBits(other.marketCap)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.percent_change_1h) != Double.doubleToLongBits(other.percent_change_1h)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.percent_change_7d) != Double.doubleToLongBits(other.percent_change_7d)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.volume24h) != Double.doubleToLongBits(other.volume24h)) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.symbol, other.symbol)) {
+            return false;
+        }
+        if (!Objects.equals(this.slug, other.slug)) {
+            return false;
+        }
+        if (!Objects.equals(this.cryptocurrencyDetails, other.cryptocurrencyDetails)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
     
 }
