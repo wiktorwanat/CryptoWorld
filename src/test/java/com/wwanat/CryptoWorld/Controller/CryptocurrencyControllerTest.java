@@ -13,15 +13,16 @@ import com.wwanat.CryptoWorld.Security.JWT.JwtUtils;
 import com.wwanat.CryptoWorld.Service.CryptocurrencyService;
 import java.util.ArrayList;
 import java.util.List;
+import static org.apache.http.client.methods.RequestBuilder.post;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.doNothing;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -40,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author Wiktor
  */
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = CryptocurrencyController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
+@WebMvcTest(value = CryptocurrencyController.class)
 public class CryptocurrencyControllerTest {
     
     static String apiUrl="http://localhost:8080/api/";
@@ -68,7 +69,7 @@ public class CryptocurrencyControllerTest {
     
     public CryptocurrencyControllerTest(){}
         
-    @WithAnonymousUser
+    @WithMockUser(username="userWithoutAuthorities",password="user")
     @Test
     public void getAllCryptocurrenciesTest_withAnonymousUser_shouldReturnCorrectListOfCryptocurrenciesWitkOKStatus() throws Exception{
         List<Cryptocurrency> expectedCryptoList=new ArrayList<Cryptocurrency>();
@@ -115,7 +116,7 @@ public class CryptocurrencyControllerTest {
         given(cryptocurrencyService.getByName(Mockito.any(String.class))).willReturn(this.cryptocurrencyTestObject);
         mvc.perform(get(apiUrl+"cryptocurrency/Bitcoin")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().is(403));
     }
     
     @WithMockUser(username = "1050106266",
@@ -141,7 +142,7 @@ public class CryptocurrencyControllerTest {
             doNothing().when(cryptocurrencyService).removeCryptocurrencyByName(Mockito.any(String.class));
             mvc.perform(MockMvcRequestBuilders.delete(apiUrl+"cryptocurrency/Bitcoin")
                     .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isUnauthorized());
+                    .andExpect(status().is(403));
     }
     
     @WithMockUser(username="admin",password="admin",authorities="ROLE_ADMIN")
@@ -153,5 +154,70 @@ public class CryptocurrencyControllerTest {
                     .andExpect(status().isOk());
     }
     
+    @WithMockUser(username="admin",password="admin",authorities="ROLE_USER")
+    @Test
+    public void deleteCryptocurrencyByNameTest_accessWithUserRole_shouldReturnUnAuthorizeStatus() throws Exception{
+            doNothing().when(cryptocurrencyService).removeCryptocurrencyByName(Mockito.any(String.class));
+            mvc.perform(MockMvcRequestBuilders.delete(apiUrl+"cryptocurrency/Bitcoin")
+                    .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().is(403));
+    }
     
+    @WithMockUser(username="admin",password="admin",authorities="ROLE_ADMIN")
+    @Test
+    public void deleteCryptocurrencyByNameTest_accessAuthorizedUser_withServiceError_shouldReturn404Status() throws Exception{
+            willThrow(new Exception()).willDoNothing().given(cryptocurrencyService).removeCryptocurrencyByName(Mockito.any(String.class));
+            mvc.perform(MockMvcRequestBuilders.delete(apiUrl+"cryptocurrency/Bitcoin")
+                    .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().is(404));
+    }
+    
+    
+    @WithMockUser(username="admin",password="admin",authorities="ROLE_ADMIN")
+    @Test
+    public void createCryptocurrencyTest_accessAuthorizedUser_shouldSuccesfullyCreateCryptocurrency() throws Exception{
+            given(cryptocurrencyService.createCryptocurrency(Mockito.any(Cryptocurrency.class))).willReturn(this.cryptocurrencyTestObject);
+            mvc.perform(MockMvcRequestBuilders.post(apiUrl+"cryptocurrency/create")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(asJsonString(this.cryptocurrencyTestObject)))
+                    .andExpect(status().isCreated());
+    }
+    
+    @WithMockUser(username="admin",password="admin",authorities="ROLE_ADMIN")
+    @Test
+    public void createCryptocurrencyTest_accessAuthorizedUser_withServiceError_shouldReturn404Status() throws Exception{
+            given(cryptocurrencyService.createCryptocurrency(Mockito.any(Cryptocurrency.class))).willThrow(new Exception());
+            mvc.perform(MockMvcRequestBuilders.post(apiUrl+"cryptocurrency/create")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(asJsonString(this.cryptocurrencyTestObject)))
+                    .andExpect(status().is(404));
+    }
+    
+    @WithMockUser(username="user",password="user",authorities="ROLE_USER")
+    @Test
+    public void createCryptocurrencyTest_accessWithUserRole_shouldReturnUnAuthorizedStatus() throws Exception{
+            given(cryptocurrencyService.createCryptocurrency(Mockito.any(Cryptocurrency.class))).willReturn(this.cryptocurrencyTestObject);
+            mvc.perform(MockMvcRequestBuilders.post(apiUrl+"cryptocurrency/create")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(asJsonString(this.cryptocurrencyTestObject)))
+                    .andExpect(status().is(403));
+    }
+    
+        
+    @WithMockUser(username="user",password="user",authorities="ROLE_USER")
+    @Test
+    public void createCryptocurrencyTest_accessWithUserRole_withMissingContent_shouldReturn400Status() throws Exception{
+            given(cryptocurrencyService.createCryptocurrency(Mockito.any(Cryptocurrency.class))).willThrow(new Exception());
+            mvc.perform(MockMvcRequestBuilders.post(apiUrl+"cryptocurrency/create")
+                    .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().is(400));
+    }
+    
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

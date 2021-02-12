@@ -47,9 +47,6 @@ public class CryptocurrencyController {
         try{
             allCryptocurrencies=cryptocurrencyService.getAll();
             return new ResponseEntity(allCryptocurrencies,HttpStatus.OK);
-        }catch(AccessDeniedException e){
-            logger.error("Unauthorize user Error "+ e, CryptocurrencyController.class);
-            return new ResponseEntity(allCryptocurrencies,HttpStatus.UNAUTHORIZED);
         }catch(Exception e){
             logger.error("Server Error "+ e, CryptocurrencyController.class);
             return new ResponseEntity(allCryptocurrencies,HttpStatus.valueOf(404));
@@ -65,9 +62,6 @@ public class CryptocurrencyController {
         try{
             cryptocurrency=cryptocurrencyService.getByName(name);
             return new ResponseEntity(cryptocurrency,HttpStatus.OK);
-        }catch(AccessDeniedException e){
-            logger.error("Unauthorize user Error "+ e, CryptocurrencyController.class);
-            return new ResponseEntity(cryptocurrency,HttpStatus.UNAUTHORIZED);
         }catch(Exception e){
             logger.error("Server Error "+ e, CryptocurrencyController.class);
             return new ResponseEntity(cryptocurrency,HttpStatus.valueOf(404));
@@ -83,9 +77,6 @@ public class CryptocurrencyController {
         try{
             cryptocurrencyService.removeCryptocurrencyByName(name);
             return new ResponseEntity(HttpStatus.OK);
-        }catch(AccessDeniedException e){
-            logger.error("Unauthorize user Error "+ e, CryptocurrencyController.class);
-            return new ResponseEntity(cryptocurrency,HttpStatus.UNAUTHORIZED);
         }catch(Exception e){
             logger.error("Server Error "+ e, CryptocurrencyController.class);
             return new ResponseEntity(cryptocurrency,HttpStatus.valueOf(404));
@@ -98,10 +89,8 @@ public class CryptocurrencyController {
     public ResponseEntity createCryptocurrency(@RequestBody Cryptocurrency cryptocurrency){
         logger.info("Calling /api/cryptocurrency/create POST method",CryptocurrencyController.class);
         try{
-            return new ResponseEntity(cryptocurrencyService.createCryptocurrency(cryptocurrency),HttpStatus.CREATED);
-        }catch(AccessDeniedException e){
-            logger.error("Unauthorize user Error "+ e, CryptocurrencyController.class);
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            Cryptocurrency c=cryptocurrencyService.createCryptocurrency(cryptocurrency);
+            return new ResponseEntity(c,HttpStatus.valueOf(201));
         }catch(Exception e){
             logger.error("Server Error "+ e, CryptocurrencyController.class);
             return new ResponseEntity(HttpStatus.valueOf(404));
