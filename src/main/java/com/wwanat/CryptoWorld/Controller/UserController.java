@@ -39,7 +39,7 @@ public class UserController {
     @RequestMapping(method=RequestMethod.GET,value="/myCryptocurrencies")
     @PreAuthorize("hasRole('USER')")
     @ResponseBody
-    public ResponseEntity getAllUserFavouriteCryptocurrencies(){
+    public ResponseEntity getUserFavouriteCryptocurrenciesList(){
         logger.info("Calling /api/myCryptocurrencies GET method",CryptocurrencyController.class);
         try{
             String username=SecurityContextHolder.getContext().getAuthentication().getName();
@@ -67,7 +67,7 @@ public class UserController {
         }
     }
     
-    @RequestMapping(method=RequestMethod.POST,value="/myCryptocurrencies/remove/{name}")
+    @RequestMapping(method=RequestMethod.DELETE,value="/myCryptocurrencies/remove/{name}")
     @PreAuthorize("hasRole('USER')")
     @ResponseBody
     public ResponseEntity removeCryptocurrencyFromUserFavouriteList(@PathVariable String name){
