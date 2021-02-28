@@ -1,0 +1,13 @@
+version: "3"
+services:
+  database_mongodb:
+     container_name: "api-database"
+     image: mongo:latest
+     ports:
+      - 27017:27017
+  backend:
+     image: cryptoworldbackend:v1
+     ports:
+      - 8080:8080
+     links:
+      - database_mongodb
