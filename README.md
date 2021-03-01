@@ -25,6 +25,12 @@ Frontend:
  docker pull mongo:latest
 ```
 
+* Build frontend image (from my other repository - CryptoWorldClient)
+
+```
+ docker build -f Dockerfile -t cryptoworldapi:v1 .
+```
+
 * Build backend image
 
 ```
