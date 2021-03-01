@@ -11,3 +11,9 @@ services:
       - 8080:8080
      links:
       - database_mongodb
+  frontend:
+      image: cryptoworldapi:v1
+      ports:
+        - 4200:4200
+      links:
+        - backend
