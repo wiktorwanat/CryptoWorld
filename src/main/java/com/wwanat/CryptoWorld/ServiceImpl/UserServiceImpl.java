@@ -8,6 +8,7 @@ package com.wwanat.CryptoWorld.ServiceImpl;
 import com.wwanat.CryptoWorld.Mail.MailService;
 import com.wwanat.CryptoWorld.Mail.MailServiceImpl;
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
+import com.wwanat.CryptoWorld.Model.Notification;
 import com.wwanat.CryptoWorld.Model.User;
 import com.wwanat.CryptoWorld.Repository.UserRepository;
 import com.wwanat.CryptoWorld.Service.CryptocurrencyService;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.mail.MessagingException;
+import javax.management.NotificationFilter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -182,7 +185,41 @@ public class UserServiceImpl implements UserService{
         }
     }
 
-    
-    
-    
+    @Override
+    public List<Notification> getUserNotifications(String username) {
+        List<Notification> notifications=new ArrayList();
+        try{
+            User user=userRepository.findByUsername(username);
+            notifications=user.getUserNotification();
+        }catch(Exception e){
+            logger.error("Exception thrown in getUserNotifications method ", UserServiceImpl.class);
+        }
+        return notifications;
+    }
+
+    @Override
+    public void addNotificationToUser(String username, Notification notification) {
+        try{
+            User user=userRepository.findByUsername(username);
+            if(user!=null && !user.getUserNotification().contains(notification)) {
+                user.addNotification(notification);
+                userRepository.save(user);
+            }
+        }catch(Exception e){
+            logger.error("Exception thrown in addNotificationToUser method ", UserServiceImpl.class);
+        }
+    }
+
+    @Override
+    public void removeNotificationFromUser(String username, Notification notification) {
+        try{
+            User user=userRepository.findByUsername(username);
+            if(user!=null && user.getUserNotification().contains(notification)) {
+                user.removeNotification(notification);
+                userRepository.save(user);
+            }
+        }catch(Exception e){
+            logger.error("Exception thrown in removeNotificationFromUser method ", UserServiceImpl.class);
+        }
+    }
 }

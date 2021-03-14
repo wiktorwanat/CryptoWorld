@@ -40,7 +40,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @author Wiktor
  */
-@RunWith(SpringRunner.class)
 @WebMvcTest(value = UserController.class)
 public class UserControllerTest {
     
@@ -49,7 +48,7 @@ public class UserControllerTest {
     private Cryptocurrency cryptocurrencyTestObject;
     private User testUserObject;
     
-       @MockBean
+    @MockBean
     private JwtUtils jwtUtils;
 
     @MockBean

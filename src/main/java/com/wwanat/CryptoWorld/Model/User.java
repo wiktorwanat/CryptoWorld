@@ -36,6 +36,9 @@ public class User {
     @DBRef
     private List<Cryptocurrency> userCryptocurrency=new ArrayList<Cryptocurrency>();
 
+    @DBRef
+    private List<Notification> userNotification=new ArrayList<Notification>();
+
     public User() {
     }
 
@@ -93,11 +96,16 @@ public class User {
         this.userCryptocurrency = userCryptocurrency;
     }
 
-    @Override
-    public String toString() {
-        return "User{" + "id=" + id + ", username=" + username + ", password=" + password + ", email=" + email + ", roles=" + roles + ", userCryptocurrency=" + userCryptocurrency.size() + '}';
+    public List<Notification> getUserNotification() {
+        return userNotification;
     }
-    
+
+    public void setUserNotification(List<Notification> userNotification) {
+        this.userNotification = userNotification;
+    }
+
+
+
     public void addFavouriteCryptocurrency(Cryptocurrency cryptocurrency){
         if(cryptocurrency!=null){
             this.userCryptocurrency.add(cryptocurrency);
@@ -107,6 +115,18 @@ public class User {
     public void removeFavouriteCryptocurrency(Cryptocurrency cryptocurrency){
         if(cryptocurrency!=null){
             this.userCryptocurrency.remove(cryptocurrency);
+        }
+    }
+
+    public void addNotification(Notification notification){
+        if(notification!=null){
+            this.userNotification.add(notification);
+        }
+    }
+
+    public void removeNotification(Notification notification){
+        if(userNotification!=null){
+            this.userNotification.remove(userNotification);
         }
     }
     

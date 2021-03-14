@@ -6,6 +6,7 @@
 package com.wwanat.CryptoWorld.Service;
 
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
+import com.wwanat.CryptoWorld.Model.Notification;
 import com.wwanat.CryptoWorld.Model.User;
 import java.util.List;
 import java.util.Optional;
@@ -37,5 +38,11 @@ public interface UserService{
     void addCryptocurrencyToFavourite(String username,String newFavouriteCryptocurrencyName);
     
     void removeCryptocurrencyFromFavourite(String username,String newFavouriteCryptocurrencyName);
+
+    List<Notification> getUserNotifications(String username);
+
+    void addNotificationToUser(String username,Notification notification);
+
+    void removeNotificationFromUser(String username,Notification notification);
     
 }
