@@ -2,6 +2,7 @@ package com.wwanat.CryptoWorld.ServiceImpl;
 
 import com.wwanat.CryptoWorld.Model.Notification;
 import com.wwanat.CryptoWorld.Repository.NotificationRepository;
+import com.wwanat.CryptoWorld.Repository.UserRepository;
 import com.wwanat.CryptoWorld.Service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -9,6 +10,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Autowired
     private NotificationRepository notificationRepository;
+
 
     @Override
     public Notification create(Notification notification) {
@@ -31,7 +33,24 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void delete(Notification notification) {
         if (notification != null) {
+
             notificationRepository.delete(notification);
+        }
+    }
+
+    @Override
+    public Notification getByID(String id) {
+        if(id!=null){
+            return notificationRepository.findById(id).get();
+        }else{
+            return null;
+        }
+    }
+
+    @Override
+    public void deleteByID(String id) {
+        if(id!=null){
+             notificationRepository.deleteById(id);
         }
     }
 }

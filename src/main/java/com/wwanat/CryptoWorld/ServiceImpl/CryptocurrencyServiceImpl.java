@@ -6,10 +6,17 @@
 package com.wwanat.CryptoWorld.ServiceImpl;
 
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
+import com.wwanat.CryptoWorld.Model.CryptocurrencyDetails;
+import com.wwanat.CryptoWorld.Model.Notification;
+import com.wwanat.CryptoWorld.Model.User;
+import com.wwanat.CryptoWorld.Repository.CryptocurrencyDetailsRepository;
 import com.wwanat.CryptoWorld.Repository.CryptocurrencyRepository;
+import com.wwanat.CryptoWorld.Repository.NotificationRepository;
+import com.wwanat.CryptoWorld.Repository.UserRepository;
 import com.wwanat.CryptoWorld.RepositoryImpl.CryptocurrencyRepositoryCustomImpl;
 import com.wwanat.CryptoWorld.Service.CryptocurrencyService;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -28,6 +35,15 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
     
     @Autowired
     private CryptocurrencyRepository cryptocurrencyRepository;
+
+    @Autowired
+    private CryptocurrencyDetailsRepository cryptocurrencyDetailsRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     @Override
     public Cryptocurrency createCryptocurrency(Cryptocurrency cryptocurrency) throws Exception {
@@ -71,11 +87,31 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
                 logger.info("given Cryptocurreny id to remove is nullable",id);
                 throw new Exception("cryptocurrency id is nullable");
             }else{
+                Cryptocurrency cryptocurrency=cryptocurrencyRepository.findById(id).get();
+                if(cryptocurrency.getCryptocurrencyDetails()!=null){
+                    cryptocurrencyDetailsRepository.deleteById(cryptocurrency.getCryptocurrencyDetails().getId());
+                }
+                List<User> users=userRepository.findAll();
+                if(!users.isEmpty()){
+                    for(User u:users){
+                        if(!u.getUserCryptocurrency().isEmpty()){
+                                u.getUserCryptocurrency().removeIf(a -> a.getId().equals(id));
+                                userRepository.save(u);
+                            }
+                        }
+                    }
+                }
+                List<Notification> notifications=notificationRepository.findAll();
+                if(!notifications.isEmpty()){
+                    for(Notification n:notifications){
+                        if(n.getCryptocurrency().getId().equals(id)){
+                            notificationRepository.delete(n);
+                        }
+                    }
+                }
                 cryptocurrencyRepository.deleteById(id);
                 logger.info("Cryptocurreny removing succes with ocject id",id);
             }
-
-    }
 
     @Override
     public List<Cryptocurrency> getAll(){
