@@ -6,6 +6,7 @@
 package com.wwanat.CryptoWorld.Mail;
 
 import com.wwanat.CryptoWorld.Model.User;
+import com.wwanat.CryptoWorld.Model.Notification;
 import javax.mail.MessagingException;
 
 /**
@@ -15,4 +16,6 @@ import javax.mail.MessagingException;
 public interface MailService {
     
     void sendRegistrationMail(User user) throws MessagingException;
+
+    void sendNotificationMail(User user,Notification notification) throws MessagingException;
 }

@@ -6,6 +6,7 @@
 package com.wwanat.CryptoWorld.Mail;
 
 import com.wwanat.CryptoWorld.Model.User;
+import com.wwanat.CryptoWorld.Model.Notification;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import org.slf4j.Logger;
@@ -44,9 +45,26 @@ public class MailServiceImpl implements MailService{
             String text=RegistrationEmailForm.getRestriationEmailContent(user);
             mimeMessageHelper.setText(text);
             javaMailSender.send(mimeMessage);
-            logger.info("registration email send succesfully",MailServiceImpl.class);
+            logger.info("registration email send successfully",MailServiceImpl.class);
         }else{
             logger.error("registration email failed to send",MailServiceImpl.class);
+        }
+    }
+
+    @Override
+    public void sendNotificationMail(User user,Notification notification) throws MessagingException {
+        logger.info("Trying to send notification to "+user.getUsername());
+        if(user!=null && notification!=null){
+            MimeMessage mimeMessage=javaMailSender.createMimeMessage();
+            MimeMessageHelper mimeMessageHelper=new MimeMessageHelper(mimeMessage,true);
+            mimeMessageHelper.setTo(user.getEmail());
+            mimeMessageHelper.setSubject(NotificationMailForm.notificationMailTitle);
+            String text=NotificationMailForm.getNotificationEmailContent(user,notification);
+            mimeMessageHelper.setText(text);
+            javaMailSender.send(mimeMessage);
+            logger.info("notification email send successfully",MailServiceImpl.class);
+        }else{
+            logger.error("notification email failed to send",MailServiceImpl.class);
         }
     }
 }
