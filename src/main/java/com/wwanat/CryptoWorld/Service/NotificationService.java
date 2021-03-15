@@ -3,6 +3,8 @@ package com.wwanat.CryptoWorld.Service;
 import org.springframework.stereotype.Service;
 import com.wwanat.CryptoWorld.Model.Notification;
 
+import java.util.List;
+
 @Service
 public interface NotificationService {
 
@@ -15,5 +17,8 @@ public interface NotificationService {
     void delete(Notification notification);
 
     void deleteByID(String id);
+
+    List<Notification> getAllNotifications();
+
 
 }

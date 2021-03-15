@@ -12,6 +12,7 @@ import com.wwanat.CryptoWorld.Model.Notification;
 import com.wwanat.CryptoWorld.Model.User;
 import com.wwanat.CryptoWorld.Repository.UserRepository;
 import com.wwanat.CryptoWorld.Service.CryptocurrencyService;
+import com.wwanat.CryptoWorld.Service.NotificationService;
 import com.wwanat.CryptoWorld.Service.UserService;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,9 @@ public class UserServiceImpl implements UserService{
     
     @Autowired
     private CryptocurrencyService cryptocurrencyService;
+
+    @Autowired
+    private NotificationService notificationService;
     
     @Autowired
     private MailService mailService;
@@ -202,9 +206,11 @@ public class UserServiceImpl implements UserService{
         try{
             User user=userRepository.findByUsername(username);
             if(user!=null && !user.getUserNotification().contains(notification)) {
-                user.addNotification(notification);
+                Notification createdNotification=notificationService.create(notification);
+                user.addNotification(createdNotification);
                 userRepository.save(user);
             }
+            logger.info("Notification successfully added from user data",UserServiceImpl.class);
         }catch(Exception e){
             logger.error("Exception thrown in addNotificationToUser method ", UserServiceImpl.class);
         }
@@ -217,7 +223,26 @@ public class UserServiceImpl implements UserService{
             if(user!=null && user.getUserNotification().contains(notification)) {
                 user.removeNotification(notification);
                 userRepository.save(user);
+                notificationService.delete(notification);
             }
+            logger.info("Notification successfully removed from user data",UserServiceImpl.class);
+        }catch(Exception e){
+            logger.error("Exception thrown in removeNotificationFromUser method ", UserServiceImpl.class);
+        }
+    }
+
+
+    @Override
+    public void removeNotificationFromUserByID(String username, String notificationId) {
+        try{
+            User user=userRepository.findByUsername(username);
+            Notification n=notificationService.getByID(notificationId);
+            if(user!=null && user.getUserNotification().contains(n)) {
+                user.removeNotification(n);
+                userRepository.save(user);
+                notificationService.deleteByID(notificationId);
+            }
+            logger.info("Notification successfully removed from user data",UserServiceImpl.class);
         }catch(Exception e){
             logger.error("Exception thrown in removeNotificationFromUser method ", UserServiceImpl.class);
         }

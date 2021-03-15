@@ -44,5 +44,7 @@ public interface UserService{
     void addNotificationToUser(String username,Notification notification);
 
     void removeNotificationFromUser(String username,Notification notification);
-    
+
+
+    void removeNotificationFromUserByID(String username,String notificationId);
 }
