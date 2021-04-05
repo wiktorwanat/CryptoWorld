@@ -5,6 +5,7 @@
  */
 package com.wwanat.CryptoWorld.Controller;
 
+import com.wwanat.CryptoWorld.HttpModels.NotificationRequest;
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
 import com.wwanat.CryptoWorld.Model.Notification;
 import com.wwanat.CryptoWorld.Service.NotificationService;
@@ -115,11 +116,11 @@ public class UserController {
     @RequestMapping(method=RequestMethod.POST,value="/notifications")
     @PreAuthorize("hasRole('USER')")
     @ResponseBody
-    public ResponseEntity createUserNotification(@RequestBody Notification notification){
+    public ResponseEntity createUserNotification(@RequestBody NotificationRequest notificationRequest){
         logger.info("Calling /api/notifications POST method -creating notification",CryptocurrencyController.class);
         try{
             String username=SecurityContextHolder.getContext().getAuthentication().getName();
-            userService.addNotificationToUser(username,notification);
+            userService.addNotificationToUser(username,notificationRequest);
             return new ResponseEntity(HttpStatus.OK);
         }catch(Exception e){
             logger.error("Server Error "+ e, CryptocurrencyController.class);

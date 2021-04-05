@@ -1,5 +1,6 @@
 package com.wwanat.CryptoWorld.Model;
 
+import com.wwanat.CryptoWorld.HttpModels.NotificationRequest;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,7 +11,7 @@ public class Notification {
     @Id
     private String id;
 
-    private Long value;
+    private Double value;
 
     private NotificationType notificationType;
 
@@ -20,7 +21,7 @@ public class Notification {
     public Notification(){
     }
 
-    public Notification(Long value, NotificationType notificationType,Cryptocurrency cryptocurrency) {
+    public Notification(Double value, NotificationType notificationType,Cryptocurrency cryptocurrency) {
         this.value=value;
         this.notificationType = notificationType;
         this.cryptocurrency=cryptocurrency;
@@ -34,11 +35,11 @@ public class Notification {
         this.id = id;
     }
 
-    public Long getValue() {
+    public Double getValue() {
         return value;
     }
 
-    public void setValue(Long value) {
+    public void setValue(Double value) {
         this.value = value;
     }
 

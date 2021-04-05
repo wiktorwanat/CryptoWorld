@@ -5,6 +5,7 @@
  */
 package com.wwanat.CryptoWorld.Service;
 
+import com.wwanat.CryptoWorld.HttpModels.NotificationRequest;
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
 import com.wwanat.CryptoWorld.Model.Notification;
 import com.wwanat.CryptoWorld.Model.User;
@@ -41,7 +42,7 @@ public interface UserService{
 
     List<Notification> getUserNotifications(String username);
 
-    void addNotificationToUser(String username,Notification notification);
+    void addNotificationToUser(String username, NotificationRequest notificationRequest);
 
     void removeNotificationFromUser(String username,Notification notification);
 

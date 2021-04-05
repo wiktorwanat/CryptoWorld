@@ -1,8 +1,11 @@
 package com.wwanat.CryptoWorld.ServiceImpl;
 
+import com.wwanat.CryptoWorld.HttpModels.NotificationRequest;
+import com.wwanat.CryptoWorld.Model.Cryptocurrency;
 import com.wwanat.CryptoWorld.Model.Notification;
 import com.wwanat.CryptoWorld.Repository.NotificationRepository;
 import com.wwanat.CryptoWorld.Repository.UserRepository;
+import com.wwanat.CryptoWorld.Service.CryptocurrencyService;
 import com.wwanat.CryptoWorld.Service.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +22,9 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Autowired
     private NotificationRepository notificationRepository;
+
+    @Autowired
+    private CryptocurrencyService cryptocurrencyService;
 
 
     @Override
@@ -83,5 +89,23 @@ public class NotificationServiceImpl implements NotificationService {
         allNotifications= notificationRepository.findAll();
         logger.info("Notifications collected from database",NotificationServiceImpl.class);
         return allNotifications;
+    }
+
+    @Override
+    public Notification createNotificationFromRequest(NotificationRequest notificationRequest){
+        Notification n =new Notification();
+        Cryptocurrency c=null;
+        try{
+            c=cryptocurrencyService.getByName(notificationRequest.getNotificationCryptocurrencyName());
+        }catch(Exception e){
+            logger.info("Notifications cannot be created due to missing cryptocurrency",NotificationServiceImpl.class);
+        }
+        if(c!=null) {
+            n.setNotificationType(notificationRequest.getNotificationType());
+            n.setCryptocurrency(c);
+            n.setValue(notificationRequest.getNotificationValue());
+            n=this.create(n);
+        }
+        return n;
     }
 }

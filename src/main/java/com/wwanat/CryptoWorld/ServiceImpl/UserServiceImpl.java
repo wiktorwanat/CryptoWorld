@@ -5,6 +5,7 @@
  */
 package com.wwanat.CryptoWorld.ServiceImpl;
 
+import com.wwanat.CryptoWorld.HttpModels.NotificationRequest;
 import com.wwanat.CryptoWorld.Mail.MailService;
 import com.wwanat.CryptoWorld.Mail.MailServiceImpl;
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
@@ -202,11 +203,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void addNotificationToUser(String username, Notification notification) {
+    public void addNotificationToUser(String username, NotificationRequest notificationRequest) {
         try{
             User user=userRepository.findByUsername(username);
-            if(user!=null && !user.getUserNotification().contains(notification)) {
-                Notification createdNotification=notificationService.create(notification);
+            Notification createdNotification=notificationService.createNotificationFromRequest(notificationRequest);
+            if(user!=null) {
                 user.addNotification(createdNotification);
                 userRepository.save(user);
             }

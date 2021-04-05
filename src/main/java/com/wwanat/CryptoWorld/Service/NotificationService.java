@@ -1,5 +1,6 @@
 package com.wwanat.CryptoWorld.Service;
 
+import com.wwanat.CryptoWorld.HttpModels.NotificationRequest;
 import org.springframework.stereotype.Service;
 import com.wwanat.CryptoWorld.Model.Notification;
 
@@ -19,6 +20,8 @@ public interface NotificationService {
     void deleteByID(String id);
 
     List<Notification> getAllNotifications();
+
+    Notification createNotificationFromRequest(NotificationRequest notificationRequest);
 
 
 }
