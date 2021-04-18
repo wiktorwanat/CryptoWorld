@@ -14,5 +14,5 @@ import com.wwanat.CryptoWorld.Model.CryptocurrencyDetails;
 public interface CryptocurrencyDetailsRepositoryCustom {
     
             CryptocurrencyDetails findCryptocurrencyDetailsByName(String name);
-            boolean CryptocurrencyDetailsExists(String name);
+            boolean cryptocurrencyDetailsExists(String name);
 }

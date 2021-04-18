@@ -7,13 +7,13 @@ package com.wwanat.CryptoWorld.Service;
 
 import com.wwanat.CryptoWorld.Model.EnumRole;
 import com.wwanat.CryptoWorld.Model.Role;
-import org.springframework.stereotype.Service;
 
 /**
  *
  * @author Wiktor
  */
-
 public interface RoleService {
-     Role findByRoleName(EnumRole name);
+
+     Role findByRoleName(EnumRole name) throws Exception;
+
 }

@@ -44,7 +44,7 @@ public class CryptocurrencyDetailsRepositoryCustomImpl implements Cryptocurrency
     }
 
     @Override
-    public boolean CryptocurrencyDetailsExists(String name) {
+    public boolean cryptocurrencyDetailsExists(String name) {
         boolean exists=false;
          CryptocurrencyDetails cryptoDetails=null;
        cryptoDetails=findCryptocurrencyDetailsByName(name);

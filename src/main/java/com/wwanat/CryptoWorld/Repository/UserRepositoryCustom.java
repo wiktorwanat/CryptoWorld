@@ -18,4 +18,6 @@ public interface UserRepositoryCustom {
     boolean userExistByUsername(String username);
     
     boolean userExistByEmail(String email);
+
+    void deleteUserDependencies(String id);
 }

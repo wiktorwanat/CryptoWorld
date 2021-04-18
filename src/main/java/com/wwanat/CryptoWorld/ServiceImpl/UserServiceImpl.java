@@ -5,6 +5,7 @@
  */
 package com.wwanat.CryptoWorld.ServiceImpl;
 
+import com.wwanat.CryptoWorld.Exception.EntityNotFoundException;
 import com.wwanat.CryptoWorld.HttpModels.NotificationRequest;
 import com.wwanat.CryptoWorld.Mail.MailService;
 import com.wwanat.CryptoWorld.Mail.MailServiceImpl;
@@ -48,53 +49,105 @@ public class UserServiceImpl implements UserService{
     private MailService mailService;
 
     @Override
-    public User findByUsername(String username) {
-        logger.info("findByUsername with username "+username , UserServiceImpl.class);
-        return userRepository.findByUsername(username);
-    }
-
-    @Override
-    public boolean userExistByUsername(String username) {
-        logger.info("userExistByUsername with username "+username , UserServiceImpl.class);
-        return userRepository.userExistByUsername(username);
-    }
-
-    @Override
-    public boolean userExistByEmail(String email) {
-        logger.info("userExistByEmail with email "+email , UserServiceImpl.class);
-        return userRepository.userExistByEmail(email);
-    }
-
-    @Override
-    public User createUser(User user) {
-        logger.info("Creating new user "+user.toString() , UserServiceImpl.class);
-        try{
-            mailService.sendRegistrationMail(user);
-        }catch( MessagingException e){
-            logger.error("RegistrationMail failed to send -method createUser", UserServiceImpl.class);
-        }
-        return userRepository.save(user);
-    }
-
-    @Override
-    public Optional<User> getById(String id) {
-        logger.info("getById with id "+id, UserServiceImpl.class);
-        return userRepository.findById(id);
-    }
-
-    @Override
-    public User updateUser(User user) {
-        logger.info("Update user "+user.toString() , UserServiceImpl.class);
-        return userRepository.save(user);
-    }
-
-    @Override
-    public void removeUser(String id) {
-            if(id==null){
-                logger.error("given user id to remove is nullable", UserServiceImpl.class);
+    public User getByUsername(String username) throws Exception {
+        if(username!=null){
+            User user=userRepository.findByUsername(username);
+            if(user!=null){
+                logger.info("findByUsername method with username "+username , UserServiceImpl.class);
+                return user;
             }else{
+                throw new EntityNotFoundException(User.class,"username",username);
+            }
+        }else{
+            logger.info("Null pointer exception thrown in getByUsername method", UserServiceImpl.class);
+            throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
+    public boolean userExistByUsername(String username) throws Exception {
+        if(username!=null){
+            boolean exists=userRepository.userExistByUsername(username);
+            logger.info("userExistByUsername method with username "+username , UserServiceImpl.class);
+            return exists;
+        }else{
+            logger.info("Null pointer exception thrown in userExistByUsername method", UserServiceImpl.class);
+            throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
+    public boolean userExistByEmail(String email) throws Exception {
+        logger.info("userExistByEmail with email "+email , UserServiceImpl.class);
+        if(email!=null){
+            boolean exists=userRepository.userExistByEmail(email);
+            logger.info("userExistByEmail method with email "+email , UserServiceImpl.class);
+            return exists;
+        }else{
+            logger.info("Null pointer exception thrown in userExistByEmail method", UserServiceImpl.class);
+            throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
+    public User createUser(User user) throws Exception {
+        logger.info("Creating new user "+user.toString() , UserServiceImpl.class);
+        if(user!=null){
+            User createdUser=userRepository.save(user);
+            logger.info("New user created "+user.toString() , UserServiceImpl.class);
+            try{
+                mailService.sendRegistrationMail(user);
+            }catch( MessagingException e){
+                logger.error("RegistrationMail failed to send -method createUser", UserServiceImpl.class);
+            }
+            return createdUser;
+        }else{
+            logger.info("Null pointer exception thrown in createUser method", UserServiceImpl.class);
+            throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
+    public User getById(String id) throws Exception {
+        if(id!=null){
+            User user=userRepository.findByUsername(id);
+            if(user!=null){
+                logger.info("getById method with username "+id , UserServiceImpl.class);
+                return user;
+            }else{
+                throw new EntityNotFoundException(User.class,"id",id);
+            }
+        }else{
+            logger.info("Null pointer exception thrown in getById method", UserServiceImpl.class);
+            throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
+    public User updateUser(User user) throws Exception {
+        if(user!=null){
+            User updatedUser=userRepository.save(user);
+            if(updatedUser!=null){
+                logger.info("Update user "+user.toString() , UserServiceImpl.class);
+                return updatedUser;
+            }else{
+                throw new EntityNotFoundException(User.class,"User",user.toString());
+            }
+        }else{
+            logger.info("Null pointer exception thrown in updateUser method", UserServiceImpl.class);
+            throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
+    public void removeUser(String id) throws Exception {
+            if(id!=null){
+                userRepository.deleteUserDependencies(id);
                 userRepository.deleteById(id);
-                logger.info("user removing succes with ocject id "+id, UserServiceImpl.class);
+                logger.info("User "+id+" removed from system" , UserServiceImpl.class);
+            }else{
+                logger.info("Null pointer exception thrown in removeUser method", UserServiceImpl.class);
+                throw new IllegalArgumentException();
             }
     }
 
@@ -107,56 +160,64 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<Cryptocurrency> getUserFavouriteCryptocurrencies(String username) {
+    public List<Cryptocurrency> getUserFavouriteCryptocurrencies(String username)  throws Exception {
         List<Cryptocurrency> userFavouriteCryptocurrencyList=new ArrayList();
-        try{
+        if(username!=null){
             userFavouriteCryptocurrencyList=userRepository.findByUsername(username).getUserCryptocurrency();
-            logger.info("User "+username +" favourite Cryptocurrency list collected", UserServiceImpl.class);
-        }catch(Exception e){
-            logger.error("Exception thrown in addCryptocurrencyToFavourite method ", UserServiceImpl.class);
+            if(userFavouriteCryptocurrencyList!=null && !userFavouriteCryptocurrencyList.isEmpty()) {
+                logger.info("User " + username + " favourite Cryptocurrency list collected", UserServiceImpl.class);
+                return userFavouriteCryptocurrencyList;
+            }else{
+                throw new EntityNotFoundException(User.class,"Username",username);
+            }
+        }else{
+            logger.error("Exception thrown in getUserFavouriteCryptocurrencies method ", UserServiceImpl.class);
+            throw new IllegalArgumentException();
         }
-        return userFavouriteCryptocurrencyList;
     }
     
     @Override
-    public void addCryptocurrencyToFavourite(String username,String newFavouriteCryptocurrencyName){
-        try{
-            User user=userRepository.findByUsername(username);
-            if(user!=null){
-                Cryptocurrency newFavouriteCryptocurrency=cryptocurrencyService.getByName(newFavouriteCryptocurrencyName);
-                if(newFavouriteCryptocurrency!=null){
-                    List<Cryptocurrency> cryptoList=user.getUserCryptocurrency();
-                    boolean exist=false;
-                    if(cryptoList!=null){
-                        if(cryptoList.size()>0){
-                            for(Cryptocurrency c: cryptoList){
-                                if(c!=null){
-                                    if(c.getName().contains(newFavouriteCryptocurrency.getName())){exist=true;}
+    public void addCryptocurrencyToFavourite(String username,String newFavouriteCryptocurrencyName) throws Exception {
+        if(username!=null && newFavouriteCryptocurrencyName!=null) {
+            User user = userRepository.findByUsername(username);
+            if (user != null) {
+                Cryptocurrency newFavouriteCryptocurrency = cryptocurrencyService.getByName(newFavouriteCryptocurrencyName);
+                if (newFavouriteCryptocurrency != null) {
+                    List<Cryptocurrency> cryptoList = user.getUserCryptocurrency();
+                    boolean exist = false;
+                    if (cryptoList != null) {
+                        if (cryptoList.size() > 0) {
+                            for (Cryptocurrency c : cryptoList) {
+                                if (c != null) {
+                                    if (c.getName().contains(newFavouriteCryptocurrency.getName())) {
+                                        exist = true;
+                                    }
                                 }
                             }
                         }
-                        if(exist==false){
+                        if (exist == false) {
                             user.getUserCryptocurrency().add(newFavouriteCryptocurrency);
                             updateUser(user);
-                            logger.info("Cryptocurrency "+newFavouriteCryptocurrencyName+" added to "+username+" favourite list", UserServiceImpl.class);
-                        }else{
-                            logger.info("Cryptocurrency "+newFavouriteCryptocurrencyName+" is already in "+username+" favourite Cryptoucrrency list", UserServiceImpl.class);
+                            logger.info("Cryptocurrency " + newFavouriteCryptocurrencyName + " added to " + username + " favourite list", UserServiceImpl.class);
+                        } else {
+                            logger.info("Cryptocurrency " + newFavouriteCryptocurrencyName + " is already in " + username + " favourite Cryptoucrrency list", UserServiceImpl.class);
                         }
                     }
-                }else{
-                    logger.warn("Cryptocurrency "+newFavouriteCryptocurrencyName+" not found in db ", UserServiceImpl.class);
+                } else {
+                    logger.warn("Cryptocurrency " + newFavouriteCryptocurrencyName + " not found in db ", UserServiceImpl.class);
                 }
-            }else{
-                logger.warn("given user with username "+username+" not found" , UserServiceImpl.class);
+            } else {
+                logger.warn("given user with username " + username + " not found", UserServiceImpl.class);
             }
-        }catch(Exception e){
+        }else{
             logger.error("Exception thrown in addCryptocurrencyToFavourite method ", UserServiceImpl.class);
+            throw new IllegalArgumentException();
         }
     }
 
     @Override
-    public void removeCryptocurrencyFromFavourite(String username, String newFavouriteCryptocurrencyName) {
-        try{
+    public void removeCryptocurrencyFromFavourite(String username, String newFavouriteCryptocurrencyName)  throws Exception {
+        if(username!=null && newFavouriteCryptocurrencyName!=null){
             User user=userRepository.findByUsername(username);
             if(user!=null){
                  System.out.println(user.toString());
@@ -185,67 +246,10 @@ public class UserServiceImpl implements UserService{
             }else{
                 logger.warn("given user with username "+username+" not found" , UserServiceImpl.class);
             }
-        }catch(Exception e){
+        }else{
             logger.error("Exception thrown in removeCryptocurrencyFromFavourite method ", UserServiceImpl.class);
+            throw new IllegalArgumentException();
         }
     }
 
-    @Override
-    public List<Notification> getUserNotifications(String username) {
-        List<Notification> notifications=new ArrayList();
-        try{
-            User user=userRepository.findByUsername(username);
-            notifications=user.getUserNotification();
-        }catch(Exception e){
-            logger.error("Exception thrown in getUserNotifications method ", UserServiceImpl.class);
-        }
-        return notifications;
-    }
-
-    @Override
-    public void addNotificationToUser(String username, NotificationRequest notificationRequest) {
-        try{
-            User user=userRepository.findByUsername(username);
-            Notification createdNotification=notificationService.createNotificationFromRequest(notificationRequest);
-            if(user!=null) {
-                user.addNotification(createdNotification);
-                userRepository.save(user);
-            }
-            logger.info("Notification successfully added from user data",UserServiceImpl.class);
-        }catch(Exception e){
-            logger.error("Exception thrown in addNotificationToUser method ", UserServiceImpl.class);
-        }
-    }
-
-    @Override
-    public void removeNotificationFromUser(String username, Notification notification) {
-        try{
-            User user=userRepository.findByUsername(username);
-            if(user!=null && user.getUserNotification().contains(notification)) {
-                user.removeNotification(notification);
-                userRepository.save(user);
-                notificationService.delete(notification);
-            }
-            logger.info("Notification successfully removed from user data",UserServiceImpl.class);
-        }catch(Exception e){
-            logger.error("Exception thrown in removeNotificationFromUser method ", UserServiceImpl.class);
-        }
-    }
-
-
-    @Override
-    public void removeNotificationFromUserByID(String username, String notificationId) {
-        try{
-            User user=userRepository.findByUsername(username);
-            Notification n=notificationService.getByID(notificationId);
-            if(user!=null && user.getUserNotification().contains(n)) {
-                user.removeNotification(n);
-                userRepository.save(user);
-                notificationService.deleteByID(notificationId);
-            }
-            logger.info("Notification successfully removed from user data",UserServiceImpl.class);
-        }catch(Exception e){
-            logger.error("Exception thrown in removeNotificationFromUser method ", UserServiceImpl.class);
-        }
-    }
 }

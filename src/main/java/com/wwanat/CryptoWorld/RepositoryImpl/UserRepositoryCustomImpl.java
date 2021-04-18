@@ -5,6 +5,7 @@
  */
 package com.wwanat.CryptoWorld.RepositoryImpl;
 
+import com.wwanat.CryptoWorld.Model.Notification;
 import com.wwanat.CryptoWorld.Model.Role;
 import com.wwanat.CryptoWorld.Model.User;
 import com.wwanat.CryptoWorld.Repository.UserRepositoryCustom;
@@ -81,4 +82,13 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom{
         return false;
     }
 
+    @Override
+    public void deleteUserDependencies(String id) {
+        if(id!=null){
+            final Query query = new Query();
+            query.addCriteria(Criteria.where("notoficationOwner").is(id));
+            mongoTemplate.findAllAndRemove(query,Notification.class);
+        }
+
+    }
 }

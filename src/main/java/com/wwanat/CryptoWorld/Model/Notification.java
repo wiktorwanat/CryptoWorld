@@ -1,5 +1,6 @@
 package com.wwanat.CryptoWorld.Model;
 
+import com.mongodb.lang.NonNull;
 import com.wwanat.CryptoWorld.HttpModels.NotificationRequest;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -16,15 +17,21 @@ public class Notification {
     private NotificationType notificationType;
 
     @DBRef
+    @NonNull
     private Cryptocurrency cryptocurrency;
+
+    @DBRef
+    private User notificationOwner;
+
 
     public Notification(){
     }
 
-    public Notification(Double value, NotificationType notificationType,Cryptocurrency cryptocurrency) {
-        this.value=value;
+    public Notification(Double value, NotificationType notificationType, Cryptocurrency cryptocurrency, User notificationOwner) {
+        this.value = value;
         this.notificationType = notificationType;
-        this.cryptocurrency=cryptocurrency;
+        this.cryptocurrency = cryptocurrency;
+        this.notificationOwner = notificationOwner;
     }
 
     public String getId() {
@@ -57,5 +64,13 @@ public class Notification {
 
     public void setCryptocurrency(Cryptocurrency cryptocurrency) {
         this.cryptocurrency = cryptocurrency;
+    }
+
+    public User getNotifcationOwner() {
+        return notificationOwner;
+    }
+
+    public void setNotificationOwner(User notificationOwner) {
+        this.notificationOwner = notificationOwner;
     }
 }

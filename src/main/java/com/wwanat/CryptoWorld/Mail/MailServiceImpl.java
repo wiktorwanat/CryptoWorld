@@ -45,9 +45,9 @@ public class MailServiceImpl implements MailService{
             String text=RegistrationEmailForm.getRestriationEmailContent(user);
             mimeMessageHelper.setText(text);
             javaMailSender.send(mimeMessage);
-            logger.info("registration email send successfully",MailServiceImpl.class);
+            logger.info("Registration email send successfully",MailServiceImpl.class);
         }else{
-            logger.error("registration email failed to send",MailServiceImpl.class);
+            logger.error("Registration email failed to send",MailServiceImpl.class);
         }
     }
 
@@ -62,9 +62,9 @@ public class MailServiceImpl implements MailService{
             String text=NotificationMailForm.getNotificationEmailContent(user,notification);
             mimeMessageHelper.setText(text);
             javaMailSender.send(mimeMessage);
-            logger.info("notification email send successfully",MailServiceImpl.class);
+            logger.info("Notification email send successfully",MailServiceImpl.class);
         }else{
-            logger.error("notification email failed to send",MailServiceImpl.class);
+            logger.error("Notification email failed to send",MailServiceImpl.class);
         }
     }
 }

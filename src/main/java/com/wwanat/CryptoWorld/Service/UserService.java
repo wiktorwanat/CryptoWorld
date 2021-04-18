@@ -5,6 +5,7 @@
  */
 package com.wwanat.CryptoWorld.Service;
 
+import com.wwanat.CryptoWorld.Exception.EntityNotFoundException;
 import com.wwanat.CryptoWorld.HttpModels.NotificationRequest;
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
 import com.wwanat.CryptoWorld.Model.Notification;
@@ -18,34 +19,26 @@ import java.util.Optional;
  */
 public interface UserService{
     
-    User findByUsername(String username);
+    User getByUsername(String username) throws Exception ;
     
-    boolean userExistByUsername(String username);
+    boolean userExistByUsername(String username) throws Exception ;
     
-    boolean userExistByEmail(String email);
+    boolean userExistByEmail(String email) throws Exception ;
     
-    User createUser(User user);
+    User createUser(User user) throws Exception ;
     
-    Optional<User> getById(String id);
+    User getById(String id) throws Exception ;
     
-    User updateUser(User user);
+    User updateUser(User user) throws Exception;
     
-    void removeUser(String id);
+    void removeUser(String id) throws Exception ;
     
     List<User> getUsers();
     
-    List<Cryptocurrency> getUserFavouriteCryptocurrencies(String username);
+    List<Cryptocurrency> getUserFavouriteCryptocurrencies(String username) throws Exception ;
     
-    void addCryptocurrencyToFavourite(String username,String newFavouriteCryptocurrencyName);
+    void addCryptocurrencyToFavourite(String username,String newFavouriteCryptocurrencyName) throws Exception ;
     
-    void removeCryptocurrencyFromFavourite(String username,String newFavouriteCryptocurrencyName);
+    void removeCryptocurrencyFromFavourite(String username,String newFavouriteCryptocurrencyName) throws Exception ;
 
-    List<Notification> getUserNotifications(String username);
-
-    void addNotificationToUser(String username, NotificationRequest notificationRequest);
-
-    void removeNotificationFromUser(String username,Notification notification);
-
-
-    void removeNotificationFromUserByID(String username,String notificationId);
 }

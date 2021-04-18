@@ -14,4 +14,7 @@ import com.wwanat.CryptoWorld.Model.Cryptocurrency;
 public interface CryptocurrencyRepositoryCustom {
     
         Cryptocurrency findCryptocurrencyByName(String name);
+
+        void deleteCryptocurrencyNotification(String cryptocurrencyId);
+
 }

@@ -16,10 +16,17 @@ import java.util.Optional;
 public interface CryptocurrencyService {
     
     Cryptocurrency createCryptocurrency(Cryptocurrency cryptocurrency) throws Exception;
+
     Cryptocurrency updateCryptocurrency(Cryptocurrency cryptocurrency) throws Exception;
+
     void removeCryptocurrency(String id) throws Exception;
+
     List<Cryptocurrency> getAll() throws Exception;
+
     Cryptocurrency getByName(String name) throws Exception;
+
     Optional<Cryptocurrency> getById(String id) throws Exception;
+
     void removeCryptocurrencyByName(String name) throws Exception;
+
 }

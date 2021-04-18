@@ -5,14 +5,16 @@ import com.wwanat.CryptoWorld.Model.NotificationType;
 public class NotificationRequest {
     private Double notificationValue;
     private String notificationCryptocurrencyName;
+    private String notificationOwner;
     private NotificationType notificationType;
 
     public NotificationRequest() {
     }
 
-    public NotificationRequest(Double notificationValue, String notificationCryptocurrencyName, NotificationType notificationType) {
+    public NotificationRequest(Double notificationValue, String notificationCryptocurrencyName, String notificationOwner, NotificationType notificationType) {
         this.notificationValue = notificationValue;
         this.notificationCryptocurrencyName = notificationCryptocurrencyName;
+        this.notificationOwner = notificationOwner;
         this.notificationType = notificationType;
     }
 
@@ -38,5 +40,13 @@ public class NotificationRequest {
 
     public void setNotificationType(NotificationType notificationType) {
         this.notificationType = notificationType;
+    }
+
+    public String getNotificationOwner() {
+        return notificationOwner;
+    }
+
+    public void setNotificationOwner(String notificationOwner) {
+        this.notificationOwner = notificationOwner;
     }
 }

@@ -17,6 +17,6 @@ import org.springframework.stereotype.Repository;
 public interface CryptocurrencyDetailsRepository extends MongoRepository<CryptocurrencyDetails,String>,CryptocurrencyDetailsRepositoryCustom{
     
             CryptocurrencyDetails findCryptocurrencyDetailsByName(String name);
-            boolean CryptocurrencyDetailsExists(String name);
+            boolean cryptocurrencyDetailsExists(String name);
             
 }

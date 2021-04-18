@@ -27,8 +27,13 @@ public class RoleServiceImpl implements RoleService{
     private RoleRepository roleRepository;
 
     @Override
-    public Role findByRoleName(EnumRole name) {
-        return roleRepository.findByRoleName(name);
+    public Role findByRoleName(EnumRole name) throws Exception{
+        if(name!=null){
+            return roleRepository.findByRoleName(name);
+        }else{
+            logger.info("Null pointer exception thrown in findByRoleName method", RoleServiceImpl.class);
+            throw new IllegalArgumentException();
+        }
     }
     
     

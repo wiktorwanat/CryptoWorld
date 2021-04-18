@@ -5,6 +5,7 @@
  */
 package com.wwanat.CryptoWorld.ServiceImpl;
 
+import com.wwanat.CryptoWorld.Exception.EntityNotFoundException;
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
 import com.wwanat.CryptoWorld.Model.CryptocurrencyDetails;
 import com.wwanat.CryptoWorld.Model.Notification;
@@ -47,71 +48,82 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
 
     @Override
     public Cryptocurrency createCryptocurrency(Cryptocurrency cryptocurrency) throws Exception {
-            cryptocurrency=cryptocurrencyRepository.save(cryptocurrency);
-            logger.info("Creating new ryptocurrency", cryptocurrency);
-            return cryptocurrency;
+        if(cryptocurrency!=null) {
+            Cryptocurrency createdCryptocurrency = cryptocurrencyRepository.save(cryptocurrency);
+            if(createdCryptocurrency!=null) {
+                logger.info("Creating new cryptocurrency", cryptocurrency);
+                return createdCryptocurrency;
+            }else{
+                logger.error("Entity not found exception thrown in createCryptocurrency",CryptocurrencyServiceImpl.class);
+                throw new EntityNotFoundException(Cryptocurrency.class,"cryptocurrency",cryptocurrency.toString());
+            }
+        }else{
+            logger.info("Illegal argument in createCryptocurrency method", CryptocurrencyServiceImpl.class);
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override
     public Cryptocurrency updateCryptocurrency(Cryptocurrency cryptocurrency) throws Exception {
-        Cryptocurrency crypto=null;
-        try{
-            crypto=getByName(cryptocurrency.getName());
-        }catch(Exception e){
-             logger.error("Update failure", CryptocurrencyServiceImpl.class);
-        }
-        if(crypto==null){
-            logger.info("Cryptocurrency created", CryptocurrencyServiceImpl.class);
-            return cryptocurrencyRepository.save(cryptocurrency);
-        }else{
-            crypto.setName(cryptocurrency.getName());
-            crypto.setSymbol(cryptocurrency.getSymbol());
-            crypto.setActualPrice(cryptocurrency.getActualPrice());
-            crypto.setMarketCap(cryptocurrency.getMarketCap());
-            crypto.setPercent_change_1h(cryptocurrency.getPercent_change_1h());
-            crypto.setPercent_change_24h(cryptocurrency.getPercent_change_24h());
-            crypto.setPercent_change_7d(cryptocurrency.getPercent_change_7d());
-            crypto.setSlug(cryptocurrency.getSlug());
-            crypto.setVolume24h(cryptocurrency.getVolume24h());
-            if(cryptocurrency.getCryptocurrencyDetails()!=null){
-                crypto.setCryptocurrencyDetails(cryptocurrency.getCryptocurrencyDetails());
+        Cryptocurrency crypto = null;
+        if(cryptocurrency!=null){
+            crypto = getByName(cryptocurrency.getName());
+            if (crypto == null) {
+                logger.info("Cryptocurrency created", CryptocurrencyServiceImpl.class);
+                return cryptocurrencyRepository.save(cryptocurrency);
+            } else {
+                crypto.setName(cryptocurrency.getName());
+                crypto.setSymbol(cryptocurrency.getSymbol());
+                crypto.setActualPrice(cryptocurrency.getActualPrice());
+                crypto.setMarketCap(cryptocurrency.getMarketCap());
+                crypto.setPercent_change_1h(cryptocurrency.getPercent_change_1h());
+                crypto.setPercent_change_24h(cryptocurrency.getPercent_change_24h());
+                crypto.setPercent_change_7d(cryptocurrency.getPercent_change_7d());
+                crypto.setSlug(cryptocurrency.getSlug());
+                crypto.setVolume24h(cryptocurrency.getVolume24h());
+                if (cryptocurrency.getCryptocurrencyDetails() != null) {
+                    crypto.setCryptocurrencyDetails(cryptocurrency.getCryptocurrencyDetails());
+                }
+                logger.info("Cryptocurrency " + crypto.getName() + " updated", CryptocurrencyServiceImpl.class);
+                return cryptocurrencyRepository.save(crypto);
             }
-            logger.info("Cryptocurrency "+crypto.getName()+" updated", CryptocurrencyServiceImpl.class);
-            return cryptocurrencyRepository.save(crypto);
+        }else{
+            logger.info("Illegal argument in updateCryptocurrency method", CryptocurrencyServiceImpl.class);
+            throw new IllegalArgumentException();
         }
     }
 
     @Override
     public void removeCryptocurrency(String id) throws Exception {
-            if(id==null){
-                logger.info("given Cryptocurreny id to remove is nullable",id);
-                throw new Exception("cryptocurrency id is nullable");
-            }else{
-                Cryptocurrency cryptocurrency=cryptocurrencyRepository.findById(id).get();
-                if(cryptocurrency.getCryptocurrencyDetails()!=null){
-                    cryptocurrencyDetailsRepository.deleteById(cryptocurrency.getCryptocurrencyDetails().getId());
-                }
-                List<User> users=userRepository.findAll();
-                if(!users.isEmpty()){
-                    for(User u:users){
-                        if(!u.getUserCryptocurrency().isEmpty()){
-                                u.getUserCryptocurrency().removeIf(a -> a.getId().equals(id));
-                                userRepository.save(u);
-                            }
-                        }
-                    }
-                }
-                List<Notification> notifications=notificationRepository.findAll();
-                if(!notifications.isEmpty()){
-                    for(Notification n:notifications){
-                        if(n.getCryptocurrency().getId().equals(id)){
-                            notificationRepository.delete(n);
-                        }
-                    }
-                }
-                cryptocurrencyRepository.deleteById(id);
-                logger.info("Cryptocurreny removing succes with ocject id",id);
+        if (id != null) {
+            Cryptocurrency cryptocurrency = cryptocurrencyRepository.findById(id).get();
+            if (cryptocurrency.getCryptocurrencyDetails() != null) {
+                cryptocurrencyDetailsRepository.deleteById(cryptocurrency.getCryptocurrencyDetails().getId());
             }
+            List<User> users = userRepository.findAll();
+            if (!users.isEmpty()) {
+                for (User u : users) {
+                    if (!u.getUserCryptocurrency().isEmpty()) {
+                        u.getUserCryptocurrency().removeIf(a -> a.getId().equals(id));
+                        userRepository.save(u);
+                    }else{
+                        logger.error("Entity not found exception thrown in removeCryptocurrency",CryptocurrencyServiceImpl.class);
+                        throw new EntityNotFoundException(Cryptocurrency.class,"id",id);
+                    }
+                }
+            }else{
+                logger.error("Entity not found exception thrown in removeCryptocurrency",CryptocurrencyServiceImpl.class);
+                throw new EntityNotFoundException(Cryptocurrency.class,"id",id);
+            }
+            cryptocurrencyRepository.deleteCryptocurrencyNotification(id);
+            cryptocurrencyRepository.deleteById(id);
+            logger.info("Cryptocurrency successfully removed with id", id);
+        }else{
+            logger.info("Illegal argument in removeCryptocurrency method", CryptocurrencyServiceImpl.class);
+            throw new IllegalArgumentException();
+        }
+    }
+
 
     @Override
     public List<Cryptocurrency> getAll(){
@@ -124,27 +136,54 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
     @Override
     public Cryptocurrency getByName(String name) throws Exception {
         Cryptocurrency cryptocurrency=null;
-        try{
-            cryptocurrency=cryptocurrencyRepository.findCryptocurrencyByName(name);
-        }catch(Exception e){
-            logger.error(e.getMessage(), CryptocurrencyServiceImpl.class);
+        if(name!=null) {
+            cryptocurrency = cryptocurrencyRepository.findCryptocurrencyByName(name);
+            if (cryptocurrency != null) {
+                logger.info("Cryptocurrency collected from database");
+                return cryptocurrency;
+            }else{
+                logger.error("Entity not found exception thrown in getByName",CryptocurrencyServiceImpl.class);
+                throw new EntityNotFoundException(Cryptocurrency.class,"name",name);
+            }
+        }else{
+            logger.info("Illegal argument in getByName method", CryptocurrencyServiceImpl.class);
+            throw new IllegalArgumentException();
         }
-        return cryptocurrency;
     }
 
     @Override
     public Optional<Cryptocurrency> getById(String id) throws Exception {
-        Optional<Cryptocurrency> cryptocurrency=cryptocurrencyRepository.findById(id);
-        return cryptocurrency;
+        if(id!=null) {
+            Optional<Cryptocurrency> cryptocurrency = cryptocurrencyRepository.findById(id);
+            if (cryptocurrency != null){
+                logger.info("Cryptocurrency collected from database");
+                return cryptocurrency;
+            }else{
+                logger.error("Entity not found exception thrown in getById",CryptocurrencyServiceImpl.class);
+                throw new EntityNotFoundException(Cryptocurrency.class,"id",id);
+            }
+        }else{
+            logger.info("Illegal argument in getByName method", CryptocurrencyServiceImpl.class);
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override
     public void removeCryptocurrencyByName(String name) throws Exception {
-        Cryptocurrency cryptocurrency=null;
-        cryptocurrency=getByName(name);
-        if(cryptocurrency!=null){
-           removeCryptocurrency(cryptocurrency.getId());
-           logger.info("removeCryptocurrencyByName Method succesly remove object with name"+name, CryptocurrencyServiceImpl.class);
+        Cryptocurrency cryptocurrency = null;
+        if (name != null) {
+            cryptocurrency = getByName(name);
+            if (cryptocurrency != null) {
+                cryptocurrencyRepository.deleteCryptocurrencyNotification(cryptocurrency.getId());
+                cryptocurrencyRepository.deleteById(cryptocurrency.getId());
+                logger.info("Removing cryptocurrency object with name" + name, CryptocurrencyServiceImpl.class);
+            }else{
+                logger.error("Entity not found exception thrown in removeCryptocurrencyByName",CryptocurrencyServiceImpl.class);
+                throw new EntityNotFoundException(Cryptocurrency.class,"name",name);
+            }
+        } else {
+            logger.info("Illegal argument in getByName method", CryptocurrencyServiceImpl.class);
+            throw new IllegalArgumentException();
         }
     }
 

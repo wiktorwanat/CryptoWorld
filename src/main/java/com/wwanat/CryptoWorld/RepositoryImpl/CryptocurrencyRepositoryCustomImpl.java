@@ -6,6 +6,7 @@
 package com.wwanat.CryptoWorld.RepositoryImpl;
 
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
+import com.wwanat.CryptoWorld.Model.Notification;
 import com.wwanat.CryptoWorld.Repository.CryptocurrencyRepositoryCustom;
 import java.util.List;
 import org.slf4j.Logger;
@@ -43,6 +44,16 @@ public class CryptocurrencyRepositoryCustomImpl implements CryptocurrencyReposit
         }
         return c;
     }
-    
-    
+
+    @Override
+    public void deleteCryptocurrencyNotification(String cryptocurrencyId) {
+            if(cryptocurrencyId!=null){
+                final Query query = new Query();
+                query.addCriteria(Criteria.where("cryptocurrency").is(cryptocurrencyId));
+                mongoTemplate.findAllAndRemove(query, Notification.class);
+            }
+    }
+
+
 }
+

@@ -16,11 +16,18 @@ import java.util.Optional;
 public interface CryptocurrencyDetailsService{
     
     CryptocurrencyDetails createCryptocurrencyDetails(CryptocurrencyDetails cryptocurrencyDetails) throws Exception;
+
     CryptocurrencyDetails updateCryptocurrencyDetails(CryptocurrencyDetails cryptocurrencyDetails) throws Exception;
+
     void removeCryptocurrencyDetails(String id) throws Exception;
-    List<CryptocurrencyDetails> getAllCryptocurrencyDetails() throws Exception;
+
+    List<CryptocurrencyDetails> getAllCryptocurrencyDetails();
+
     Optional<CryptocurrencyDetails> getById(String id) throws Exception;
+
     void removeCryptocurrencyDetailsByName(String name) throws Exception;
+
     CryptocurrencyDetails findCryptocurrencyDetailsByName(String name);
+
      boolean CryptocurrencyDetailsExists(String name);
 }
