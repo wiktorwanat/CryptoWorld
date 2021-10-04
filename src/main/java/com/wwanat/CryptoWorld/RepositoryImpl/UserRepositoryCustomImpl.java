@@ -6,13 +6,10 @@
 package com.wwanat.CryptoWorld.RepositoryImpl;
 
 import com.wwanat.CryptoWorld.Model.Notification;
-import com.wwanat.CryptoWorld.Model.Role;
 import com.wwanat.CryptoWorld.Model.User;
 import com.wwanat.CryptoWorld.Repository.UserRepositoryCustom;
 
 import java.util.List;
-
-import static org.apache.tomcat.jni.Lock.name;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

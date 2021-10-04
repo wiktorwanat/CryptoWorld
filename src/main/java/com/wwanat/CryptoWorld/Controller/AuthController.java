@@ -9,15 +9,13 @@ import com.wwanat.CryptoWorld.HttpModels.JwtResponse;
 import com.wwanat.CryptoWorld.HttpModels.LoginRequest;
 import com.wwanat.CryptoWorld.HttpModels.MessageResponse;
 import com.wwanat.CryptoWorld.HttpModels.SignupRequest;
-import com.wwanat.CryptoWorld.Model.Types.UserType;
-import com.wwanat.CryptoWorld.Model.Role;
+import com.wwanat.CryptoWorld.Model.Types.UserRole;
 import com.wwanat.CryptoWorld.Model.User;
 import com.wwanat.CryptoWorld.Security.JWT.JwtUtils;
 import com.wwanat.CryptoWorld.Security.Service.UserDetailsImpl;
-import com.wwanat.CryptoWorld.Service.RoleService;
 import com.wwanat.CryptoWorld.Service.UserService;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -47,12 +45,8 @@ public class AuthController {
 
     final private static Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private RoleService roleService;
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -84,6 +78,7 @@ public class AuthController {
 
         String email = signupRequest.getEmail();
         String username = signupRequest.getUsername();
+
         if (email != null && userService.userExistByEmail(email)) {
             logger.error("User with given email already exists", AuthController.class);
             return ResponseEntity.badRequest().body(new MessageResponse("User with given email already exists"));
@@ -92,37 +87,21 @@ public class AuthController {
             return ResponseEntity.badRequest().body(new MessageResponse("User with given username already exists"));
         } else {
             User user = new User(signupRequest.getUsername(), passwordEncoder.encode(signupRequest.getPassword()), signupRequest.getEmail());
+            List<UserRole> registratingUserRoles = new ArrayList<>();
+            List<String> requestUserRoles = signupRequest.getRoles();
 
-            Set<Role> userRoles = new HashSet();
-            Set<String> requestRole = signupRequest.getRoles();
-
-            if (requestRole != null) {
-                requestRole.forEach(role -> {
+            if (requestUserRoles != null) {
+                requestUserRoles.forEach(role -> {
                     if (role.contains("admin")) {
-                        Role admin = roleService.findByRoleName(UserType.ROLE_ADMIN);
-                        if (admin == null) {
-                            throw new RuntimeException("Error: Role is not found.");
-                        } else {
-                            userRoles.add(admin);
-                        }
+                        registratingUserRoles.add(UserRole.ROLE_ADMIN);
                     } else if (role.contains("user") || role.isEmpty()) {
-                        Role userRole = roleService.findByRoleName(UserType.ROLE_USER);
-                        if (userRole == null) {
-                            throw new RuntimeException("Error: Role is not found.");
-                        } else {
-                            userRoles.add(userRole);
-                        }
+                        registratingUserRoles.add(UserRole.ROLE_USER);
                     }
                 });
             } else {
-                Role userRole = roleService.findByRoleName(UserType.ROLE_USER);
-                if (userRole == null) {
-                    throw new RuntimeException("Error: Role is not found.");
-                } else {
-                    userRoles.add(userRole);
-                }
+                registratingUserRoles.add(UserRole.ROLE_USER);
             }
-            user.setRoles(userRoles);
+            user.setRoles(registratingUserRoles);
             userService.createUser(user);
             logger.info("signupRequest ended succesfully", AuthController.class);
             return ResponseEntity.ok(new MessageResponse("Succesfully registered"));

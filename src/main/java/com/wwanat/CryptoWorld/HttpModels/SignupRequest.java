@@ -5,6 +5,7 @@
  */
 package com.wwanat.CryptoWorld.HttpModels;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -15,12 +16,12 @@ public class SignupRequest {
     private String username;
     private String email;
     private String password;
-    private Set<String> roles;
+    private List<String> roles;
 
     public SignupRequest() {
     }
 
-    public SignupRequest(String username, String email, String password, Set<String> roles) {
+    public SignupRequest(String username, String email, String password, List<String> roles) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -28,11 +29,11 @@ public class SignupRequest {
     }
 
 
-    public Set<String> getRoles() {
+    public List<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<String> roles) {
+    public void setRoles(List<String> roles) {
         this.roles = roles;
     }
 

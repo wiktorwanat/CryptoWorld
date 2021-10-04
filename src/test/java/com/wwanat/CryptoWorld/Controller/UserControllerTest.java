@@ -8,7 +8,7 @@ package com.wwanat.CryptoWorld.Controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
-import com.wwanat.CryptoWorld.Model.Types.UserType;
+import com.wwanat.CryptoWorld.Model.Types.UserRole;
 import com.wwanat.CryptoWorld.Model.User;
 import com.wwanat.CryptoWorld.Security.JWT.AuthEntryPointJwt;
 import com.wwanat.CryptoWorld.Security.JWT.JwtUtils;
@@ -72,7 +72,7 @@ public class UserControllerTest {
         this.cryptocurrencyTestObject = new Cryptocurrency("Bitcoin", "BTC", "bitcoin", 33826.0, 600000000.0, 100.0, 100.0, 100.0, 100000000.0);
         this.testUserObject = new User("user", "user", "user@gmail.com");
         Set set = new HashSet();
-        set.add(UserType.ROLE_USER);
+        set.add(UserRole.ROLE_USER);
         this.testUserObject.setRoles(set);
         this.testUserObject.addFavouriteCryptocurrency(this.cryptocurrencyTestObject);
     }

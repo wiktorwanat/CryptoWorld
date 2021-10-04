@@ -8,7 +8,7 @@ package com.wwanat.CryptoWorld.Model.Types;
 /**
  * @author Wiktor
  */
-public enum UserType {
+public enum UserRole {
     ROLE_USER,
     ROLE_ADMIN
 }
