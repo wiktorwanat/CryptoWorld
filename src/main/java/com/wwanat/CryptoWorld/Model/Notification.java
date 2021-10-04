@@ -14,11 +14,11 @@ public class Notification {
 
     private Double value;
 
-    private NotificationType notificationType;
-
     @DBRef
     @NonNull
     private Cryptocurrency cryptocurrency;
+
+    private NotificationType notificationType;
 
     @DBRef
     private User notificationOwner;

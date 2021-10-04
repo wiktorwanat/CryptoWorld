@@ -28,6 +28,7 @@ public class Cryptocurrency {
     private double percent_change_24h;
     private double percent_change_7d;
     private double volume24h;
+
     @DBRef
     private CryptocurrencyDetails cryptocurrencyDetails;
 

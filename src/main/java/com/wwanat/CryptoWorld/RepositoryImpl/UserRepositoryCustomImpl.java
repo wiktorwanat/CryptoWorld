@@ -23,7 +23,7 @@ import org.springframework.data.mongodb.core.query.Query;
  */
 public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 
-    final private static Logger logger = LoggerFactory.getLogger(RoleRepositoryCustomImpl.class);
+    final private static Logger logger = LoggerFactory.getLogger(UserRepositoryCustomImpl.class);
 
     @Autowired
     private MongoTemplate mongoTemplate;
