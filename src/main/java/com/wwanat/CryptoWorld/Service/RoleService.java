@@ -5,7 +5,7 @@
  */
 package com.wwanat.CryptoWorld.Service;
 
-import com.wwanat.CryptoWorld.Model.EnumRole;
+import com.wwanat.CryptoWorld.Model.Types.UserType;
 import com.wwanat.CryptoWorld.Model.Role;
 
 /**
@@ -14,6 +14,6 @@ import com.wwanat.CryptoWorld.Model.Role;
  */
 public interface RoleService {
 
-     Role findByRoleName(EnumRole name) throws Exception;
+     Role findByRoleName(UserType name) throws Exception;
 
 }

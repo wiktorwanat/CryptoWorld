@@ -8,14 +8,13 @@ package com.wwanat.CryptoWorld.HttpModels;
 import java.util.Set;
 
 /**
- *
  * @author Wiktor
  */
 public class SignupRequest {
-    
+
     private String username;
     private String email;
-    private String password; 
+    private String password;
     private Set<String> roles;
 
     public SignupRequest() {
@@ -27,7 +26,7 @@ public class SignupRequest {
         this.password = password;
         this.roles = roles;
     }
-    
+
 
     public Set<String> getRoles() {
         return roles;
@@ -60,6 +59,6 @@ public class SignupRequest {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    
+
+
 }

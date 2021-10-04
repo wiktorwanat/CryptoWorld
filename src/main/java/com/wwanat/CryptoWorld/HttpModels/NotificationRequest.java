@@ -1,8 +1,9 @@
 package com.wwanat.CryptoWorld.HttpModels;
 
-import com.wwanat.CryptoWorld.Model.NotificationType;
+import com.wwanat.CryptoWorld.Model.Types.NotificationType;
 
 public class NotificationRequest {
+
     private Double notificationValue;
     private String notificationCryptocurrencyName;
     private String notificationOwner;

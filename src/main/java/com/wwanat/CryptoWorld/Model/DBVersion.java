@@ -3,16 +3,17 @@ package com.wwanat.CryptoWorld.Model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection="dbversion")
+@Document(collection = "dbversion")
 public class DBVersion {
 
     @Id
     private String id;
     private Double version;
 
-    public DBVersion() { }
+    public DBVersion() {
+    }
 
-    public DBVersion( Double version) {
+    public DBVersion(Double version) {
         this.version = version;
     }
 

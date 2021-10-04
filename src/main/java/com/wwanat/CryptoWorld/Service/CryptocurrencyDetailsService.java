@@ -6,15 +6,15 @@
 package com.wwanat.CryptoWorld.Service;
 
 import com.wwanat.CryptoWorld.Model.CryptocurrencyDetails;
+
 import java.util.List;
 import java.util.Optional;
 
 /**
- *
  * @author Wiktor
  */
-public interface CryptocurrencyDetailsService{
-    
+public interface CryptocurrencyDetailsService {
+
     CryptocurrencyDetails createCryptocurrencyDetails(CryptocurrencyDetails cryptocurrencyDetails) throws Exception;
 
     CryptocurrencyDetails updateCryptocurrencyDetails(CryptocurrencyDetails cryptocurrencyDetails) throws Exception;
@@ -29,5 +29,6 @@ public interface CryptocurrencyDetailsService{
 
     CryptocurrencyDetails findCryptocurrencyDetailsByName(String name);
 
-     boolean CryptocurrencyDetailsExists(String name);
+    boolean CryptocurrencyDetailsExists(String name);
+
 }

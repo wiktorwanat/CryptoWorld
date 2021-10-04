@@ -6,15 +6,15 @@
 package com.wwanat.CryptoWorld.Service;
 
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
+
 import java.util.List;
 import java.util.Optional;
 
 /**
- *
  * @author Wiktor
  */
 public interface CryptocurrencyService {
-    
+
     Cryptocurrency createCryptocurrency(Cryptocurrency cryptocurrency) throws Exception;
 
     Cryptocurrency updateCryptocurrency(Cryptocurrency cryptocurrency) throws Exception;

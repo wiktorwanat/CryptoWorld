@@ -8,21 +8,20 @@ package com.wwanat.CryptoWorld.Mail;
 import com.wwanat.CryptoWorld.Model.User;
 
 /**
- *
  * @author Wiktor
  */
 public class RegistrationEmailForm {
-    
-    public static final String registrationEmailTitle="Welcome in CryptoWorld!";
-    
-    private static String restriationEmailContent="Thank you for registering on our website %s .";
-    
-    public static String getRestriationEmailContent(User user){
-        if(user!=null){
-            restriationEmailContent=String.format(restriationEmailContent, user.getUsername());
+
+    public static final String registrationEmailTitle = "Welcome in CryptoWorld!";
+
+    private static String restriationEmailContent = "Thank you for registering on our website %s .";
+
+    public static String getRestriationEmailContent(User user) {
+        if (user != null) {
+            restriationEmailContent = String.format(restriationEmailContent, user.getUsername());
         }
         return restriationEmailContent;
     }
- 
-    
+
+
 }

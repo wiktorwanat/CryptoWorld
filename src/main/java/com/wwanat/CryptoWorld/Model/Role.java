@@ -5,25 +5,25 @@
  */
 package com.wwanat.CryptoWorld.Model;
 
+import com.wwanat.CryptoWorld.Model.Types.UserType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- *
  * @author Wiktor
  */
 @Document(collection = "roles")
 public class Role {
-    
+
     @Id
     private String id;
-    
-    private EnumRole roleName;
+
+    private UserType roleName;
 
     public Role() {
     }
 
-    public Role(EnumRole roleName) {
+    public Role(UserType roleName) {
         this.roleName = roleName;
     }
 
@@ -35,13 +35,13 @@ public class Role {
         this.id = id;
     }
 
-    public EnumRole getRoleName() {
+    public UserType getRoleName() {
         return roleName;
     }
 
-    public void setRoleName(EnumRole roleName) {
+    public void setRoleName(UserType roleName) {
         this.roleName = roleName;
     }
-    
-    
+
+
 }

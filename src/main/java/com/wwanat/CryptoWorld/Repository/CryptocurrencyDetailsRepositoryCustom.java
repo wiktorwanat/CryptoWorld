@@ -8,11 +8,12 @@ package com.wwanat.CryptoWorld.Repository;
 import com.wwanat.CryptoWorld.Model.CryptocurrencyDetails;
 
 /**
- *
  * @author Wiktor
  */
 public interface CryptocurrencyDetailsRepositoryCustom {
-    
-            CryptocurrencyDetails findCryptocurrencyDetailsByName(String name);
-            boolean cryptocurrencyDetailsExists(String name);
+
+    CryptocurrencyDetails findCryptocurrencyDetailsByName(String name);
+
+    boolean cryptocurrencyDetailsExists(String name);
+
 }

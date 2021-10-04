@@ -6,17 +6,18 @@
 package com.wwanat.CryptoWorld.CoinMarketCapController;
 
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 
 /**
- *
  * @author Wiktor
  */
 //CMC stand for CoinMarketCup
 public interface CMCCryptocurrencyValueController {
-    
-    public String makeAPICallForCryptocurrencyValue()  throws URISyntaxException, IOException;
-    public String makeAPICallForCryptocurrenyDetails(List<Cryptocurrency> cryptocurrency)  throws URISyntaxException, IOException;
+
+    public String makeAPICallForCryptocurrencyValue() throws URISyntaxException, IOException;
+
+    public String makeAPICallForCryptocurrenyDetails(List<Cryptocurrency> cryptocurrency) throws URISyntaxException, IOException;
 }

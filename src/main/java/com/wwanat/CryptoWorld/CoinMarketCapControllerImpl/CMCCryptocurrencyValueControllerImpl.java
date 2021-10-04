@@ -7,9 +7,11 @@ package com.wwanat.CryptoWorld.CoinMarketCapControllerImpl;
 
 import com.wwanat.CryptoWorld.CoinMarketCapController.CMCCryptocurrencyValueController;
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -24,21 +26,20 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
- *
  * @author Wiktor
  */
 //CMC stand for CoinMarketCup
 @Service
-public class CMCCryptocurrencyValueControllerImpl implements CMCCryptocurrencyValueController{
-    
-    final static Logger logger=LoggerFactory.getLogger(CMCCryptocurrencyValueControllerImpl.class);
-    
+public class CMCCryptocurrencyValueControllerImpl implements CMCCryptocurrencyValueController {
+
+    final static Logger logger = LoggerFactory.getLogger(CMCCryptocurrencyValueControllerImpl.class);
+
     @Value("${cmc.api.key}")
     private String apiKey;
 
     @Value("${cmc.api.cryptoValuesUrl}")
     private String cryptoValuesUrl;
-    
+
     @Value("${cmc.api.cryptoDetailsUrl}")
     private String cryptoDetailsUrl;
 
@@ -66,46 +67,45 @@ public class CMCCryptocurrencyValueControllerImpl implements CMCCryptocurrencyVa
         this.cryptoDetailsUrl = cryptoDetailsUrl;
     }
 
-    
 
-  public String makeAPICallForCryptocurrencyValue() throws URISyntaxException, IOException {
-    
-    String response_content = "";
-    logger.info("calling "+getCryptoValuesUrl(),CMCCryptocurrencyValueControllerImpl.class);
-    
-    URIBuilder query = new URIBuilder(getCryptoValuesUrl());
+    public String makeAPICallForCryptocurrencyValue() throws URISyntaxException, IOException {
 
-    CloseableHttpClient client = HttpClients.createDefault();
-    HttpGet request = new HttpGet(query.build());
+        String response_content = "";
+        logger.info("calling " + getCryptoValuesUrl(), CMCCryptocurrencyValueControllerImpl.class);
 
-    request.setHeader(HttpHeaders.ACCEPT, "application/json");
-    request.addHeader("X-CMC_PRO_API_KEY", getApiKey());
+        URIBuilder query = new URIBuilder(getCryptoValuesUrl());
 
-    CloseableHttpResponse response = client.execute(request);
+        CloseableHttpClient client = HttpClients.createDefault();
+        HttpGet request = new HttpGet(query.build());
 
-    try {
-      System.out.println(response.getStatusLine());
-      HttpEntity entity = response.getEntity();
-      response_content = EntityUtils.toString(entity);
-      System.out.println(entity.getContentType());
-      EntityUtils.consume(entity);
-      logger.info("call end succsefully ,data fetched",CMCCryptocurrencyValueControllerImpl.class);
-    } finally {
-      response.close();
+        request.setHeader(HttpHeaders.ACCEPT, "application/json");
+        request.addHeader("X-CMC_PRO_API_KEY", getApiKey());
+
+        CloseableHttpResponse response = client.execute(request);
+
+        try {
+            System.out.println(response.getStatusLine());
+            HttpEntity entity = response.getEntity();
+            response_content = EntityUtils.toString(entity);
+            System.out.println(entity.getContentType());
+            EntityUtils.consume(entity);
+            logger.info("call end succsefully ,data fetched", CMCCryptocurrencyValueControllerImpl.class);
+        } finally {
+            response.close();
+        }
+        return response_content;
     }
-    return response_content;
-  }
 
-  
+
     @Override
     public String makeAPICallForCryptocurrenyDetails(List<Cryptocurrency> cryptocurrency) throws URISyntaxException, IOException {
-            String response_content = "";
-        String fullUrlBuild="";
-        
-        fullUrlBuild=buildCryptocurrencyDetailsUrl(cryptocurrency);
-        
-        logger.info("calling "+fullUrlBuild,CMCCryptocurrencyValueControllerImpl.class);
-        
+        String response_content = "";
+        String fullUrlBuild = "";
+
+        fullUrlBuild = buildCryptocurrencyDetailsUrl(cryptocurrency);
+
+        logger.info("calling " + fullUrlBuild, CMCCryptocurrencyValueControllerImpl.class);
+
         URIBuilder query = new URIBuilder(fullUrlBuild);
 
         CloseableHttpClient client = HttpClients.createDefault();
@@ -117,29 +117,29 @@ public class CMCCryptocurrencyValueControllerImpl implements CMCCryptocurrencyVa
         CloseableHttpResponse response = client.execute(request);
 
         try {
-          System.out.println(response.getStatusLine());
-          HttpEntity entity = response.getEntity();
-          response_content = EntityUtils.toString(entity);
-          System.out.println(entity.getContentType());
-          EntityUtils.consume(entity);
-          logger.info("call end succsefully ,data fetched",CMCCryptocurrencyValueControllerImpl.class);
+            System.out.println(response.getStatusLine());
+            HttpEntity entity = response.getEntity();
+            response_content = EntityUtils.toString(entity);
+            System.out.println(entity.getContentType());
+            EntityUtils.consume(entity);
+            logger.info("call end succsefully ,data fetched", CMCCryptocurrencyValueControllerImpl.class);
         } finally {
-          response.close();
+            response.close();
         }
         return response_content;
     }
-  
-  
-    public String buildCryptocurrencyDetailsUrl(List<Cryptocurrency> cryptocurrencies){
-        String urlOut=getCryptoDetailsUrl();
-        String slugUrl="?slug=";
-        if(cryptocurrencies!=null){
-            urlOut+=slugUrl;
-            for(Cryptocurrency c:cryptocurrencies){
-                urlOut+=c.getSlug()+",";
+
+
+    public String buildCryptocurrencyDetailsUrl(List<Cryptocurrency> cryptocurrencies) {
+        String urlOut = getCryptoDetailsUrl();
+        String slugUrl = "?slug=";
+        if (cryptocurrencies != null) {
+            urlOut += slugUrl;
+            for (Cryptocurrency c : cryptocurrencies) {
+                urlOut += c.getSlug() + ",";
             }
             //deleting last comma
-            urlOut=urlOut.substring(0, urlOut.length()-1);
+            urlOut = urlOut.substring(0, urlOut.length() - 1);
         }
         return urlOut;
     }

@@ -35,25 +35,25 @@ public class NotificationServiceImpl implements NotificationService {
 
 
     @Override
-    public Notification create(Notification notification) throws Exception{
-        if(notification!=null) {
-            Notification n=notificationRepository.save(notification);
-            logger.info("Notification created in database",NotificationServiceImpl.class);
+    public Notification create(Notification notification) throws Exception {
+        if (notification != null) {
+            Notification n = notificationRepository.save(notification);
+            logger.info("Notification created in database", NotificationServiceImpl.class);
             return n;
-        }else{
-            logger.error("Cannot create notification",NotificationServiceImpl.class);
+        } else {
+            logger.error("Cannot create notification", NotificationServiceImpl.class);
             throw new IllegalArgumentException();
         }
     }
 
     @Override
-    public Notification update(Notification notification)  throws Exception{
-        if(notification!=null){
-            Notification n= notificationRepository.save(notification);
-            logger.info("Notification update in database",NotificationServiceImpl.class);
+    public Notification update(Notification notification) throws Exception {
+        if (notification != null) {
+            Notification n = notificationRepository.save(notification);
+            logger.info("Notification update in database", NotificationServiceImpl.class);
             return n;
-        }else{
-            logger.error("Unsuccessful notification updating due to nullable id",NotificationServiceImpl.class);
+        } else {
+            logger.error("Unsuccessful notification updating due to nullable id", NotificationServiceImpl.class);
             throw new IllegalArgumentException();
         }
     }
@@ -62,69 +62,69 @@ public class NotificationServiceImpl implements NotificationService {
     public void delete(Notification notification) {
         if (notification != null) {
             notificationRepository.delete(notification);
-            logger.info("Notification deleted from database",NotificationServiceImpl.class);
-        }else{
-            logger.error("Unsuccessful notification deleting due to nullable id",NotificationServiceImpl.class);
+            logger.info("Notification deleted from database", NotificationServiceImpl.class);
+        } else {
+            logger.error("Unsuccessful notification deleting due to nullable id", NotificationServiceImpl.class);
             throw new IllegalArgumentException();
         }
     }
 
     @Override
     public Notification getByID(String id) {
-        if(id!=null) {
+        if (id != null) {
             Notification n = notificationRepository.findById(id).get();
-            if (n != null){
+            if (n != null) {
                 logger.info("Notification collected from database", NotificationServiceImpl.class);
-            return n;
-            }else{
-                throw new EntityNotFoundException(Notification.class,"id",id);
+                return n;
+            } else {
+                throw new EntityNotFoundException(Notification.class, "id", id);
             }
-        }else{
-            logger.error("Cannot reach notification with nullable id",NotificationServiceImpl.class);
+        } else {
+            logger.error("Cannot reach notification with nullable id", NotificationServiceImpl.class);
             throw new IllegalArgumentException();
         }
     }
 
     @Override
     public void deleteByID(String id) {
-        if(id!=null){
+        if (id != null) {
             notificationRepository.deleteById(id);
-            logger.info("Notification deleted from database",NotificationServiceImpl.class);
-        }else{
-            logger.error("Unsuccessful notification deleting due to nullable id",NotificationServiceImpl.class);
+            logger.info("Notification deleted from database", NotificationServiceImpl.class);
+        } else {
+            logger.error("Unsuccessful notification deleting due to nullable id", NotificationServiceImpl.class);
             throw new IllegalArgumentException();
         }
     }
 
     @Override
     public List<Notification> getAllNotifications() {
-        List<Notification> allNotifications=new ArrayList();
-        allNotifications= notificationRepository.findAll();
-        logger.info("Notifications ("+allNotifications.size()+") collected from database",NotificationServiceImpl.class);
+        List<Notification> allNotifications = new ArrayList();
+        allNotifications = notificationRepository.findAll();
+        logger.info("Notifications (" + allNotifications.size() + ") collected from database", NotificationServiceImpl.class);
         return allNotifications;
     }
 
     @Override
-    public Notification createNotificationFromRequest(NotificationRequest notificationRequest) throws Exception{
-        Notification notification =new Notification();
-        Cryptocurrency cryptocurrency=null;
-        User notificationOwner=null;
-        if(notificationRequest!=null){
-            cryptocurrency=cryptocurrencyService.getByName(notificationRequest.getNotificationCryptocurrencyName());
-            notificationOwner=userService.getByUsername(notificationRequest.getNotificationOwner());
-            if(cryptocurrency!=null && notificationOwner!=null) {
+    public Notification createNotificationFromRequest(NotificationRequest notificationRequest) throws Exception {
+        Notification notification = new Notification();
+        Cryptocurrency cryptocurrency = null;
+        User notificationOwner = null;
+        if (notificationRequest != null) {
+            cryptocurrency = cryptocurrencyService.getByName(notificationRequest.getNotificationCryptocurrencyName());
+            notificationOwner = userService.getByUsername(notificationRequest.getNotificationOwner());
+            if (cryptocurrency != null && notificationOwner != null) {
                 notification.setNotificationType(notificationRequest.getNotificationType());
                 notification.setCryptocurrency(cryptocurrency);
                 notification.setValue(notificationRequest.getNotificationValue());
                 notification.setNotificationOwner(notificationOwner);
-                notification=this.create(notification);
-                logger.info("Notification "+notification.getId()+" created",NotificationServiceImpl.class);
+                notification = this.create(notification);
+                logger.info("Notification " + notification.getId() + " created", NotificationServiceImpl.class);
                 return notification;
-            }else{
-                throw new EntityNotFoundException(Notification.class,"notificationRequest",notificationRequest.toString());
+            } else {
+                throw new EntityNotFoundException(Notification.class, "notificationRequest", notificationRequest.toString());
             }
-        }else{
-            logger.info("Notification cannot be created due to missing cryptocurrency",NotificationServiceImpl.class);
+        } else {
+            logger.info("Notification cannot be created due to missing cryptocurrency", NotificationServiceImpl.class);
             throw new IllegalArgumentException();
         }
     }

@@ -9,12 +9,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- *
  * @author Wiktor
  */
-@Document(collection="cryptoDetails")
+@Document(collection = "cryptoDetails")
 public class CryptocurrencyDetails {
-    
+
     @Id
     private String id;
     private String name;
@@ -31,8 +30,8 @@ public class CryptocurrencyDetails {
     public CryptocurrencyDetails() {
     }
 
-    
-    public CryptocurrencyDetails(String name, String description, String logoUrl, String websiteUrl,String twitterUrl, String forumUrl, String redditUrl, String technicalDocumentationUrl, String sourceCodeUrl, String dateOfCreation) {
+
+    public CryptocurrencyDetails(String name, String description, String logoUrl, String websiteUrl, String twitterUrl, String forumUrl, String redditUrl, String technicalDocumentationUrl, String sourceCodeUrl, String dateOfCreation) {
         this.name = name;
         this.description = description;
         this.logoUrl = logoUrl;
@@ -45,7 +44,7 @@ public class CryptocurrencyDetails {
         this.dateOfCreation = dateOfCreation;
     }
 
-    
+
     public String getId() {
         return id;
     }
@@ -139,7 +138,5 @@ public class CryptocurrencyDetails {
         return "CryptocurrencyDetails{" + "id=" + id + ", name=" + name + ", description=" + description + ", logoUrl=" + logoUrl + ", websiteUrl=" + websiteUrl + ", twitterUrl=" + twitterUrl + ", forumUrl=" + forumUrl + ", redditUrl=" + redditUrl + ", technicalDocumentationUrl=" + technicalDocumentationUrl + ", sourceCodeUrl=" + sourceCodeUrl + ", dateOfCreation=" + dateOfCreation + '}';
     }
 
-    
-    
-    
+
 }

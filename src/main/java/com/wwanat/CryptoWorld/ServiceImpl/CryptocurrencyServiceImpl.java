@@ -16,24 +16,25 @@ import com.wwanat.CryptoWorld.Repository.NotificationRepository;
 import com.wwanat.CryptoWorld.Repository.UserRepository;
 import com.wwanat.CryptoWorld.RepositoryImpl.CryptocurrencyRepositoryCustomImpl;
 import com.wwanat.CryptoWorld.Service.CryptocurrencyService;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- *
  * @author Wiktor
  */
 @Service
-public class CryptocurrencyServiceImpl implements CryptocurrencyService{
-    
+public class CryptocurrencyServiceImpl implements CryptocurrencyService {
+
     final private static Logger logger = LoggerFactory.getLogger(CryptocurrencyServiceImpl.class);
-    
+
     @Autowired
     private CryptocurrencyRepository cryptocurrencyRepository;
 
@@ -48,16 +49,16 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
 
     @Override
     public Cryptocurrency createCryptocurrency(Cryptocurrency cryptocurrency) throws Exception {
-        if(cryptocurrency!=null) {
+        if (cryptocurrency != null) {
             Cryptocurrency createdCryptocurrency = cryptocurrencyRepository.save(cryptocurrency);
-            if(createdCryptocurrency!=null) {
+            if (createdCryptocurrency != null) {
                 logger.info("Creating new cryptocurrency", cryptocurrency);
                 return createdCryptocurrency;
-            }else{
-                logger.error("Entity not found exception thrown in createCryptocurrency",CryptocurrencyServiceImpl.class);
-                throw new EntityNotFoundException(Cryptocurrency.class,"cryptocurrency",cryptocurrency.toString());
+            } else {
+                logger.error("Entity not found exception thrown in createCryptocurrency", CryptocurrencyServiceImpl.class);
+                throw new EntityNotFoundException(Cryptocurrency.class, "cryptocurrency", cryptocurrency.toString());
             }
-        }else{
+        } else {
             logger.info("Illegal argument in createCryptocurrency method", CryptocurrencyServiceImpl.class);
             throw new IllegalArgumentException();
         }
@@ -66,7 +67,7 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
     @Override
     public Cryptocurrency updateCryptocurrency(Cryptocurrency cryptocurrency) throws Exception {
         Cryptocurrency crypto = null;
-        if(cryptocurrency!=null){
+        if (cryptocurrency != null) {
             crypto = getByName(cryptocurrency.getName());
             if (crypto == null) {
                 logger.info("Cryptocurrency created", CryptocurrencyServiceImpl.class);
@@ -87,7 +88,7 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
                 logger.info("Cryptocurrency " + crypto.getName() + " updated", CryptocurrencyServiceImpl.class);
                 return cryptocurrencyRepository.save(crypto);
             }
-        }else{
+        } else {
             logger.info("Illegal argument in updateCryptocurrency method", CryptocurrencyServiceImpl.class);
             throw new IllegalArgumentException();
         }
@@ -106,19 +107,19 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
                     if (!u.getUserCryptocurrency().isEmpty()) {
                         u.getUserCryptocurrency().removeIf(a -> a.getId().equals(id));
                         userRepository.save(u);
-                    }else{
-                        logger.error("Entity not found exception thrown in removeCryptocurrency",CryptocurrencyServiceImpl.class);
-                        throw new EntityNotFoundException(Cryptocurrency.class,"id",id);
+                    } else {
+                        logger.error("Entity not found exception thrown in removeCryptocurrency", CryptocurrencyServiceImpl.class);
+                        throw new EntityNotFoundException(Cryptocurrency.class, "id", id);
                     }
                 }
-            }else{
-                logger.error("Entity not found exception thrown in removeCryptocurrency",CryptocurrencyServiceImpl.class);
-                throw new EntityNotFoundException(Cryptocurrency.class,"id",id);
+            } else {
+                logger.error("Entity not found exception thrown in removeCryptocurrency", CryptocurrencyServiceImpl.class);
+                throw new EntityNotFoundException(Cryptocurrency.class, "id", id);
             }
             cryptocurrencyRepository.deleteCryptocurrencyNotification(id);
             cryptocurrencyRepository.deleteById(id);
             logger.info("Cryptocurrency successfully removed with id", id);
-        }else{
+        } else {
             logger.info("Illegal argument in removeCryptocurrency method", CryptocurrencyServiceImpl.class);
             throw new IllegalArgumentException();
         }
@@ -126,26 +127,26 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
 
 
     @Override
-    public List<Cryptocurrency> getAll(){
-        List<Cryptocurrency> cryptocurrencies=new ArrayList<Cryptocurrency>();
-        cryptocurrencies=cryptocurrencyRepository.findAll();
-        logger.info(cryptocurrencies.size()+" cryptocurrencies collected from database");
+    public List<Cryptocurrency> getAll() {
+        List<Cryptocurrency> cryptocurrencies = new ArrayList<Cryptocurrency>();
+        cryptocurrencies = cryptocurrencyRepository.findAll();
+        logger.info(cryptocurrencies.size() + " cryptocurrencies collected from database");
         return cryptocurrencies;
     }
 
     @Override
     public Cryptocurrency getByName(String name) throws Exception {
-        Cryptocurrency cryptocurrency=null;
-        if(name!=null) {
+        Cryptocurrency cryptocurrency = null;
+        if (name != null) {
             cryptocurrency = cryptocurrencyRepository.findCryptocurrencyByName(name);
             if (cryptocurrency != null) {
                 logger.info("Cryptocurrency collected from database");
                 return cryptocurrency;
-            }else{
-                logger.error("Entity not found exception thrown in getByName",CryptocurrencyServiceImpl.class);
-                throw new EntityNotFoundException(Cryptocurrency.class,"name",name);
+            } else {
+                logger.error("Entity not found exception thrown in getByName", CryptocurrencyServiceImpl.class);
+                throw new EntityNotFoundException(Cryptocurrency.class, "name", name);
             }
-        }else{
+        } else {
             logger.info("Illegal argument in getByName method", CryptocurrencyServiceImpl.class);
             throw new IllegalArgumentException();
         }
@@ -153,16 +154,16 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
 
     @Override
     public Optional<Cryptocurrency> getById(String id) throws Exception {
-        if(id!=null) {
+        if (id != null) {
             Optional<Cryptocurrency> cryptocurrency = cryptocurrencyRepository.findById(id);
-            if (cryptocurrency != null){
+            if (cryptocurrency != null) {
                 logger.info("Cryptocurrency collected from database");
                 return cryptocurrency;
-            }else{
-                logger.error("Entity not found exception thrown in getById",CryptocurrencyServiceImpl.class);
-                throw new EntityNotFoundException(Cryptocurrency.class,"id",id);
+            } else {
+                logger.error("Entity not found exception thrown in getById", CryptocurrencyServiceImpl.class);
+                throw new EntityNotFoundException(Cryptocurrency.class, "id", id);
             }
-        }else{
+        } else {
             logger.info("Illegal argument in getByName method", CryptocurrencyServiceImpl.class);
             throw new IllegalArgumentException();
         }
@@ -177,9 +178,9 @@ public class CryptocurrencyServiceImpl implements CryptocurrencyService{
                 cryptocurrencyRepository.deleteCryptocurrencyNotification(cryptocurrency.getId());
                 cryptocurrencyRepository.deleteById(cryptocurrency.getId());
                 logger.info("Removing cryptocurrency object with name" + name, CryptocurrencyServiceImpl.class);
-            }else{
-                logger.error("Entity not found exception thrown in removeCryptocurrencyByName",CryptocurrencyServiceImpl.class);
-                throw new EntityNotFoundException(Cryptocurrency.class,"name",name);
+            } else {
+                logger.error("Entity not found exception thrown in removeCryptocurrencyByName", CryptocurrencyServiceImpl.class);
+                throw new EntityNotFoundException(Cryptocurrency.class, "name", name);
             }
         } else {
             logger.info("Illegal argument in getByName method", CryptocurrencyServiceImpl.class);

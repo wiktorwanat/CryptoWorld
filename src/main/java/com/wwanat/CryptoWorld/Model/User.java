@@ -10,31 +10,31 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- *
  * @author Wiktor
  */
-@Document(collection="users")
+@Document(collection = "users")
 public class User {
-    
+
     @Id
     private String id;
-    
+
     private String username;
-    
+
     private String password;
-    
+
     private String email;
-    
+
     @DBRef
     private Set<Role> roles = new HashSet<>();
-    
+
     @DBRef
-    private List<Cryptocurrency> userCryptocurrency=new ArrayList<Cryptocurrency>();
+    private List<Cryptocurrency> userCryptocurrency = new ArrayList<Cryptocurrency>();
 
 
     public User() {
@@ -94,17 +94,17 @@ public class User {
         this.userCryptocurrency = userCryptocurrency;
     }
 
-    public void addFavouriteCryptocurrency(Cryptocurrency cryptocurrency){
-        if(cryptocurrency!=null){
+    public void addFavouriteCryptocurrency(Cryptocurrency cryptocurrency) {
+        if (cryptocurrency != null) {
             this.userCryptocurrency.add(cryptocurrency);
         }
     }
-    
-    public void removeFavouriteCryptocurrency(Cryptocurrency cryptocurrency){
-        if(cryptocurrency!=null){
+
+    public void removeFavouriteCryptocurrency(Cryptocurrency cryptocurrency) {
+        if (cryptocurrency != null) {
             this.userCryptocurrency.remove(cryptocurrency);
         }
     }
 
-    
+
 }

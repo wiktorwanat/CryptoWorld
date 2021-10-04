@@ -5,7 +5,7 @@
  */
 package com.wwanat.CryptoWorld.ServiceImpl;
 
-import com.wwanat.CryptoWorld.Model.EnumRole;
+import com.wwanat.CryptoWorld.Model.Types.UserType;
 import com.wwanat.CryptoWorld.Model.Role;
 import com.wwanat.CryptoWorld.Repository.RoleRepository;
 import com.wwanat.CryptoWorld.Service.RoleService;
@@ -15,26 +15,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- *
  * @author Wiktor
  */
 @Service
-public class RoleServiceImpl implements RoleService{
-    
-    private final static Logger logger=LoggerFactory.getLogger(RoleServiceImpl.class);
-    
+public class RoleServiceImpl implements RoleService {
+
+    private final static Logger logger = LoggerFactory.getLogger(RoleServiceImpl.class);
+
     @Autowired
     private RoleRepository roleRepository;
 
     @Override
-    public Role findByRoleName(EnumRole name) throws Exception{
-        if(name!=null){
+    public Role findByRoleName(UserType name) throws Exception {
+        if (name != null) {
             return roleRepository.findByRoleName(name);
-        }else{
+        } else {
             logger.info("Null pointer exception thrown in findByRoleName method", RoleServiceImpl.class);
             throw new IllegalArgumentException();
         }
     }
-    
-    
+
 }

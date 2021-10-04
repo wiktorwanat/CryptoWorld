@@ -1,12 +1,12 @@
 package com.wwanat.CryptoWorld.Model;
 
 import com.mongodb.lang.NonNull;
-import com.wwanat.CryptoWorld.HttpModels.NotificationRequest;
+import com.wwanat.CryptoWorld.Model.Types.NotificationType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection="notifications")
+@Document(collection = "notifications")
 public class Notification {
 
     @Id
@@ -24,7 +24,7 @@ public class Notification {
     private User notificationOwner;
 
 
-    public Notification(){
+    public Notification() {
     }
 
     public Notification(Double value, NotificationType notificationType, Cryptocurrency cryptocurrency, User notificationOwner) {

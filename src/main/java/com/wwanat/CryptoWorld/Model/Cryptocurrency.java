@@ -6,17 +6,17 @@
 package com.wwanat.CryptoWorld.Model;
 
 import java.util.Objects;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- *
  * @author Wiktor
  */
-@Document(collection="crypto")
+@Document(collection = "crypto")
 public class Cryptocurrency {
-    
+
     @Id
     private String id;
     private String name;
@@ -30,35 +30,35 @@ public class Cryptocurrency {
     private double volume24h;
     @DBRef
     private CryptocurrencyDetails cryptocurrencyDetails;
-    
+
 
     public Cryptocurrency() {
-        this.id=null;
-        this.name=null;
-        this.symbol=null;
-        this.slug=null;
-        this.actualPrice=0.0;
-        this.marketCap=0.0;
-        this.percent_change_1h=0.0;
-        this.percent_change_24h=0.0;
-        this.percent_change_7d=0.0;
-        this.volume24h=0.0;
-        this.cryptocurrencyDetails=null;
+        this.id = null;
+        this.name = null;
+        this.symbol = null;
+        this.slug = null;
+        this.actualPrice = 0.0;
+        this.marketCap = 0.0;
+        this.percent_change_1h = 0.0;
+        this.percent_change_24h = 0.0;
+        this.percent_change_7d = 0.0;
+        this.volume24h = 0.0;
+        this.cryptocurrencyDetails = null;
     }
 
-    public Cryptocurrency(String name, String symbol,String slug, double actualPrice, double marketCap, double percent_change_1h, double percent_change_24h, double percent_change_7d,double volume24h) {
+    public Cryptocurrency(String name, String symbol, String slug, double actualPrice, double marketCap, double percent_change_1h, double percent_change_24h, double percent_change_7d, double volume24h) {
         super();
         this.name = name;
         this.symbol = symbol;
-        this.slug=slug;
+        this.slug = slug;
         this.actualPrice = actualPrice;
         this.marketCap = marketCap;
         this.percent_change_1h = percent_change_1h;
         this.percent_change_24h = percent_change_24h;
         this.percent_change_7d = percent_change_7d;
-        this.volume24h=volume24h;
+        this.volume24h = volume24h;
     }
-    
+
 
     public String getId() {
         return id;
@@ -67,7 +67,7 @@ public class Cryptocurrency {
     public void setId(String id) {
         this.id = id;
     }
-    
+
 
     public String getName() {
         return name;
@@ -195,7 +195,6 @@ public class Cryptocurrency {
         }
         return true;
     }
-    
-    
-    
+
+
 }

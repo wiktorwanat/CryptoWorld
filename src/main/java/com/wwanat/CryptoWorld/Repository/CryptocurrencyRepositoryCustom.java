@@ -8,13 +8,12 @@ package com.wwanat.CryptoWorld.Repository;
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
 
 /**
- *
  * @author Wiktor
  */
 public interface CryptocurrencyRepositoryCustom {
-    
-        Cryptocurrency findCryptocurrencyByName(String name);
 
-        void deleteCryptocurrencyNotification(String cryptocurrencyId);
+    Cryptocurrency findCryptocurrencyByName(String name);
+
+    void deleteCryptocurrencyNotification(String cryptocurrencyId);
 
 }
