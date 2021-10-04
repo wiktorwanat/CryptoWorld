@@ -8,16 +8,16 @@ package com.wwanat.CryptoWorld.Repository;
 import com.wwanat.CryptoWorld.Model.User;
 
 /**
- *
  * @author Wiktor
  */
 public interface UserRepositoryCustom {
-    
+
     User findByUsername(String username);
-    
+
     boolean userExistByUsername(String username);
-    
+
     boolean userExistByEmail(String email);
 
     void deleteUserDependencies(String id);
+
 }

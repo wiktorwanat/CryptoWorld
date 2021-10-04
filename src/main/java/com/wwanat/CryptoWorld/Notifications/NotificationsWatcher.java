@@ -3,7 +3,7 @@ package com.wwanat.CryptoWorld.Notifications;
 
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
 import com.wwanat.CryptoWorld.Model.Notification;
-import com.wwanat.CryptoWorld.Model.NotificationType;
+import com.wwanat.CryptoWorld.Model.Types.NotificationType;
 import com.wwanat.CryptoWorld.Mail.MailService;
 import com.wwanat.CryptoWorld.Service.NotificationService;
 import org.slf4j.Logger;
@@ -30,21 +30,21 @@ public class NotificationsWatcher {
     @Scheduled(fixedDelayString = "${notificationWatcher.fixedDelay.in.milliseconds}", initialDelay = 50000)
     public void notificationWatcher() {
         List<Notification> notifications = null;
-        notifications=notificationService.getAllNotifications();
-        if(notifications!=null){
-            for(Notification notification:notifications){
-                boolean notificationStatus=false;
-                Cryptocurrency notificationCryptocurrency= notification.getCryptocurrency();
-                if(notificationCryptocurrency!=null) {
+        notifications = notificationService.getAllNotifications();
+        if (notifications != null) {
+            for (Notification notification : notifications) {
+                boolean notificationStatus = false;
+                Cryptocurrency notificationCryptocurrency = notification.getCryptocurrency();
+                if (notificationCryptocurrency != null) {
                     if (notification.getNotificationType().equals(NotificationType.OVER) && notificationCryptocurrency.getActualPrice() >= notification.getValue() || notification.getNotificationType().equals(NotificationType.BELOW) && notificationCryptocurrency.getActualPrice() <= notification.getValue()) {
                         notificationStatus = true;
                     }
-                    if(notificationStatus==true){
+                    if (notificationStatus == true) {
                         try {
-                            logger.info("Notification "+notification.getId()+" activated- sending notification to user",NotificationsWatcher.class);
+                            logger.info("Notification " + notification.getId() + " activated- sending notification to user", NotificationsWatcher.class);
                             mailService.sendNotificationMail(notification.getNotifcationOwner(), notification);
-                        }catch(MessagingException e){
-                            logger.error(e.getMessage(),NotificationsWatcher.class);
+                        } catch (MessagingException e) {
+                            logger.error(e.getMessage(), NotificationsWatcher.class);
                         }
                     }
                 }

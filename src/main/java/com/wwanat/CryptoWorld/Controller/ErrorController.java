@@ -11,17 +11,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
  * @author Wiktor
  */
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
 public class ErrorController {
-    
-    @RequestMapping(method=RequestMethod.GET,value="/error")
-    public String error(){
+
+    @RequestMapping(method = RequestMethod.GET, value = "/error")
+    public String error() {
         return "Somethink goes wrong";
     }
-    
+
 }

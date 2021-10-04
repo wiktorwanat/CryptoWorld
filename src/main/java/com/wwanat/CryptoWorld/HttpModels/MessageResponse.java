@@ -6,27 +6,22 @@
 package com.wwanat.CryptoWorld.HttpModels;
 
 /**
- *
  * @author Wiktor
  */
 public class MessageResponse {
-    
-    private String mess;
 
-    public MessageResponse() {
+    private String responseMessage;
+
+    public MessageResponse(String message) {
+        this.responseMessage = message;
     }
 
-    public MessageResponse(String mess) {
-        this.mess = mess;
+    public String getResponseMessage() {
+        return responseMessage;
     }
 
-    public String getMess() {
-        return mess;
+    public void setResponseMessage(String message) {
+        this.responseMessage = message;
     }
 
-    public void setMess(String mess) {
-        this.mess = mess;
-    }
-    
-    
 }

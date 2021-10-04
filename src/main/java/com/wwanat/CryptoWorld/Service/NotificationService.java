@@ -21,5 +21,4 @@ public interface NotificationService {
 
     Notification createNotificationFromRequest(NotificationRequest notificationRequest) throws Exception;
 
-
 }

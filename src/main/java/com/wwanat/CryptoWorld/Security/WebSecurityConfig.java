@@ -23,36 +23,33 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
- *
  * @author Wiktor
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled =true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    
+
     @Autowired
     private UserDetailsService userDetailsService;
-    
-            
+
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
-       
-    
+
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
-	return new AuthTokenFilter();
+        return new AuthTokenFilter();
     }
-        
+
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
-	return super.authenticationManagerBean();
+        return super.authenticationManagerBean();
     }
-        
+
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-	auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -63,12 +60,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated();
-        
+
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
-    
+
     @Bean
     public PasswordEncoder passwordEncoder() {
-	return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder();
     }
+
 }

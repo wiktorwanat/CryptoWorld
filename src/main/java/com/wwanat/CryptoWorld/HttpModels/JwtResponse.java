@@ -8,17 +8,16 @@ package com.wwanat.CryptoWorld.HttpModels;
 import java.util.List;
 
 /**
- *
  * @author Wiktor
  */
 public class JwtResponse {
-    
-    	private String token;
-	private String type = "Bearer";
-	private String id;
-	private String username;
-	private String email;
-	private List<String> roles;
+
+    private String token;
+    private String type = "Bearer";
+    private String id;
+    private String username;
+    private String email;
+    private List<String> roles;
 
     public JwtResponse() {
     }
@@ -30,7 +29,7 @@ public class JwtResponse {
         this.email = email;
         this.roles = roles;
     }
-        
+
 
     public String getToken() {
         return token;
@@ -79,7 +78,6 @@ public class JwtResponse {
     public void setRoles(List<String> roles) {
         this.roles = roles;
     }
-        
-        
-        
+
+
 }

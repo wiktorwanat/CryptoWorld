@@ -10,13 +10,13 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 /**
- *
  * @author Wiktor
  */
 @Repository
-public interface CryptocurrencyDetailsRepository extends MongoRepository<CryptocurrencyDetails,String>,CryptocurrencyDetailsRepositoryCustom{
-    
-            CryptocurrencyDetails findCryptocurrencyDetailsByName(String name);
-            boolean cryptocurrencyDetailsExists(String name);
-            
+public interface CryptocurrencyDetailsRepository extends MongoRepository<CryptocurrencyDetails, String>, CryptocurrencyDetailsRepositoryCustom {
+
+    CryptocurrencyDetails findCryptocurrencyDetailsByName(String name);
+
+    boolean cryptocurrencyDetailsExists(String name);
+
 }

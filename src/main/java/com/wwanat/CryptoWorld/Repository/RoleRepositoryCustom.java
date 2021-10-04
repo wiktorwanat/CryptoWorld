@@ -5,13 +5,14 @@
  */
 package com.wwanat.CryptoWorld.Repository;
 
-import com.wwanat.CryptoWorld.Model.EnumRole;
+import com.wwanat.CryptoWorld.Model.Types.UserType;
 import com.wwanat.CryptoWorld.Model.Role;
 
 /**
- *
  * @author Wiktor
  */
 public interface RoleRepositoryCustom {
-    Role findByRoleName(EnumRole name);
+
+    Role findByRoleName(UserType name);
+
 }

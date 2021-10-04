@@ -5,17 +5,17 @@
  */
 package com.wwanat.CryptoWorld.Repository;
 
-import com.wwanat.CryptoWorld.Model.EnumRole;
+import com.wwanat.CryptoWorld.Model.Types.UserType;
 import com.wwanat.CryptoWorld.Model.Role;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 /**
- *
  * @author Wiktor
  */
 @Repository
-public interface RoleRepository extends MongoRepository<Role,String>,RoleRepositoryCustom{
-    
-    Role findByRoleName(EnumRole name);
+public interface RoleRepository extends MongoRepository<Role, String>, RoleRepositoryCustom {
+
+    Role findByRoleName(UserType name);
+
 }
