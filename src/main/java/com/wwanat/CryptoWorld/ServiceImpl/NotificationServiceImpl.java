@@ -17,6 +17,7 @@ import org.springframework.data.mongodb.core.aggregation.BooleanOperators;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -102,6 +103,24 @@ public class NotificationServiceImpl implements NotificationService {
         allNotifications = notificationRepository.findAll();
         logger.info("Notifications (" + allNotifications.size() + ") collected from database", NotificationServiceImpl.class);
         return allNotifications;
+    }
+
+    @Override
+    public List<Notification> getSpecificUserNotifications(String notificationOwnerId) {
+        List<Notification> userNotifications = new ArrayList<>();
+        if(notificationOwnerId!=null) {
+            for (Notification n : new ArrayList<>(getAllNotifications())) {
+                if (!n.getNotifcationOwner().getId().equals(notificationOwnerId)) {
+                    userNotifications.add(n);
+                }
+            }
+            logger.info("User Notifications (" + userNotifications.size() + ") collected from database", NotificationServiceImpl.class);
+            return userNotifications;
+
+        }else{
+            logger.info("User notifications cannot be collected with nullable notification owner id", NotificationServiceImpl.class);
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override

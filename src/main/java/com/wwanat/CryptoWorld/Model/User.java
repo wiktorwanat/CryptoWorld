@@ -33,7 +33,6 @@ public class User {
     @DBRef
     private List<Cryptocurrency> userCryptocurrency = new ArrayList<Cryptocurrency>();
 
-
     public User() {
     }
 

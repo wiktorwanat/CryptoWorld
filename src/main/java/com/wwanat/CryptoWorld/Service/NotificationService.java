@@ -19,6 +19,8 @@ public interface NotificationService {
 
     List<Notification> getAllNotifications();
 
+    List<Notification> getSpecificUserNotifications(String notificationOwnerId) throws Exception;
+
     Notification createNotificationFromRequest(NotificationRequest notificationRequest) throws Exception;
 
 }

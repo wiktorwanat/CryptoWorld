@@ -9,6 +9,7 @@ import com.wwanat.CryptoWorld.HttpModels.JwtResponse;
 import com.wwanat.CryptoWorld.HttpModels.LoginRequest;
 import com.wwanat.CryptoWorld.HttpModels.MessageResponse;
 import com.wwanat.CryptoWorld.HttpModels.SignupRequest;
+import com.wwanat.CryptoWorld.Mail.MailService;
 import com.wwanat.CryptoWorld.Model.Types.UserRole;
 import com.wwanat.CryptoWorld.Model.User;
 import com.wwanat.CryptoWorld.Security.JWT.JwtUtils;
@@ -17,9 +18,9 @@ import com.wwanat.CryptoWorld.Service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.wwanat.CryptoWorld.ServiceImpl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.mail.MessagingException;
 
 /**
  * @author Wiktor
@@ -78,33 +81,38 @@ public class AuthController {
 
         String email = signupRequest.getEmail();
         String username = signupRequest.getUsername();
-
-        if (email != null && userService.userExistByEmail(email)) {
-            logger.error("User with given email already exists", AuthController.class);
-            return ResponseEntity.badRequest().body(new MessageResponse("User with given email already exists"));
-        } else if (username != null && userService.userExistByUsername(username)) {
-            logger.error("User with given username already exists", AuthController.class);
-            return ResponseEntity.badRequest().body(new MessageResponse("User with given username already exists"));
-        } else {
-            User user = new User(signupRequest.getUsername(), passwordEncoder.encode(signupRequest.getPassword()), signupRequest.getEmail());
-            List<UserRole> registratingUserRoles = new ArrayList<>();
-            List<String> requestUserRoles = signupRequest.getRoles();
-
-            if (requestUserRoles != null) {
-                requestUserRoles.forEach(role -> {
-                    if (role.contains("admin")) {
-                        registratingUserRoles.add(UserRole.ROLE_ADMIN);
-                    } else if (role.contains("user") || role.isEmpty()) {
-                        registratingUserRoles.add(UserRole.ROLE_USER);
-                    }
-                });
+        try {
+            if (userService.userExistByEmail(email) || userService.userExistByUsername(username)) {
+                logger.error("User with given email/username already exists", AuthController.class);
+                return ResponseEntity.badRequest().body(new MessageResponse("User with given username/email already exists"));
             } else {
-                registratingUserRoles.add(UserRole.ROLE_USER);
+                User user = new User(signupRequest.getUsername(), passwordEncoder.encode(signupRequest.getPassword()), signupRequest.getEmail());
+                List<UserRole> registratingUserRoles = new ArrayList<>();
+                List<String> requestUserRoles = signupRequest.getRoles();
+
+                if (requestUserRoles != null) {
+                    requestUserRoles.forEach(role -> {
+                        if (role.contains("admin")) {
+                            registratingUserRoles.add(UserRole.ROLE_ADMIN);
+                        } else if (role.contains("user") || role.isEmpty()) {
+                            registratingUserRoles.add(UserRole.ROLE_USER);
+                        }
+                    });
+                } else {
+                    registratingUserRoles.add(UserRole.ROLE_USER);
+                }
+                user.setRoles(registratingUserRoles);
+                userService.createUser(user);
+                logger.info("Sign up requested ended successfully", AuthController.class);
+                return ResponseEntity.ok(new MessageResponse("Successfully registered"));
             }
-            user.setRoles(registratingUserRoles);
-            userService.createUser(user);
-            logger.info("signupRequest ended succesfully", AuthController.class);
-            return ResponseEntity.ok(new MessageResponse("Succesfully registered"));
+        }catch(IllegalArgumentException illegalArgumentException){
+            logger.error("IllegalArgumentException thrown in AuthController "+illegalArgumentException.getMessage(), AuthController.class);
+            return ResponseEntity.badRequest().body(new MessageResponse("Email or username was null!"));
+        }
+        catch(Exception e){
+            logger.error("Exception thrown in AuthController "+e.getMessage(), AuthController.class);
+            return ResponseEntity.badRequest().body(new MessageResponse("Exception thrown at registration"));
         }
     }
 }
