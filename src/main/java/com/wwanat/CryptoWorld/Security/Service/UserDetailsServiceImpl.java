@@ -31,13 +31,19 @@ public class UserDetailsServiceImpl implements UserDetailsService{
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User u=userService.getByUsername(username);
-        if(u==null){
-            logger.warn("User with given username not found", UserDetailsServiceImpl.class);
-            throw new UsernameNotFoundException("User with given username not found");
-        }else{
-            logger.info("User with given username found", UserDetailsServiceImpl.class);
-            return UserDetailsImpl.build(u);
+        UserDetails userDetails= null;
+        try {
+            User user = userService.getByUsername(username);
+            if (user == null) {
+                logger.warn("User with given username not found", UserDetailsServiceImpl.class);
+                throw new UsernameNotFoundException("User with given username not found");
+            } else {
+                userDetails = UserDetailsImpl.build(user);
+                return userDetails;
+            }
+        }catch(Exception e){
+            logger.error("Exception thrown in getByUsername method in UserService");
+            return userDetails;
         }
     }
     

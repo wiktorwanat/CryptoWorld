@@ -53,7 +53,6 @@ public class UserServiceImpl implements UserService {
         if (username != null) {
             User user = userRepository.findByUsername(username);
             if (user != null) {
-                logger.info("findByUsername method with username " + username, UserServiceImpl.class);
                 return user;
             } else {
                 throw new EntityNotFoundException(User.class, "username", username);
@@ -81,7 +80,6 @@ public class UserServiceImpl implements UserService {
         logger.info("userExistByEmail with email " + email, UserServiceImpl.class);
         if (email != null) {
             boolean exists = userRepository.userExistByEmail(email);
-            logger.info("userExistByEmail method with email " + email, UserServiceImpl.class);
             return exists;
         } else {
             logger.info("Null pointer exception thrown in userExistByEmail method", UserServiceImpl.class);
@@ -161,10 +159,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Cryptocurrency> getUserFavouriteCryptocurrencies(String username) throws Exception {
+        logger.info("Trying to collect " + username + " favourite cryptocurrencies");
         List<Cryptocurrency> userFavouriteCryptocurrencyList = new ArrayList();
         if (username != null) {
             userFavouriteCryptocurrencyList = userRepository.findByUsername(username).getUserCryptocurrency();
-            if (userFavouriteCryptocurrencyList != null && !userFavouriteCryptocurrencyList.isEmpty()) {
+            if (userFavouriteCryptocurrencyList != null) {
                 logger.info("User " + username + " favourite Cryptocurrency list collected", UserServiceImpl.class);
                 return userFavouriteCryptocurrencyList;
             } else {
@@ -224,32 +223,21 @@ public class UserServiceImpl implements UserService {
                 Cryptocurrency cryptocurrencyToRemove = cryptocurrencyService.getByName(newFavouriteCryptocurrencyName);
                 if (cryptocurrencyToRemove != null) {
                     System.out.println(cryptocurrencyToRemove.toString());
-                    List<Cryptocurrency> cryptoList = user.getUserCryptocurrency();
-                    boolean exist = false;
-                    if (cryptoList != null) {
-                        for (Cryptocurrency c : cryptoList) {
-                            if (c != null) {
-                                if (c.getName().contains(cryptocurrencyToRemove.getName())) exist = true;
-                            }
-                        }
-                    }
-                    if (exist == true) {
-                        user.removeFavouriteCryptocurrency(cryptocurrencyToRemove);
+                    boolean removed = user.removeFavouriteCryptocurrency(cryptocurrencyToRemove);
+                    if (removed) {
                         updateUser(user);
-                        logger.info("Cryptocurrency " + newFavouriteCryptocurrencyName + " removed from " + username + " favourite list", UserServiceImpl.class);
+                        System.out.println(cryptocurrencyToRemove.getName() + " removed from " + user.getUsername() + " favourite list");
                     } else {
-                        logger.info("Cryptocurrency " + newFavouriteCryptocurrencyName + " is already in " + username + " favourite Cryptoucrrency list", UserServiceImpl.class);
+                        updateUser(user);
+                        System.out.println(cryptocurrencyToRemove.getName() + "can't be removed from " + user.getUsername() + " favourite list");
                     }
                 } else {
                     logger.warn("Cryptocurrency " + newFavouriteCryptocurrencyName + " not found in db ", UserServiceImpl.class);
                 }
             } else {
-                logger.warn("given user with username " + username + " not found", UserServiceImpl.class);
+                logger.error("Exception thrown in removeCryptocurrencyFromFavourite method ", UserServiceImpl.class);
+                throw new IllegalArgumentException();
             }
-        } else {
-            logger.error("Exception thrown in removeCryptocurrencyFromFavourite method ", UserServiceImpl.class);
-            throw new IllegalArgumentException();
         }
     }
-
 }

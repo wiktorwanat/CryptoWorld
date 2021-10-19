@@ -38,11 +38,10 @@ public class UserController {
     @Autowired
     private NotificationService notificationService;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/myCryptocurrencies")
+    @GetMapping(value = "/myCryptocurrency")
     @PreAuthorize("hasRole('USER')")
-    @ResponseBody
     public ResponseEntity getUserFavouriteCryptocurrenciesList() {
-        logger.info("Calling /api/myCryptocurrencies GET method", CryptocurrencyController.class);
+        logger.info("Calling /api/myCryptocurrency GET method", CryptocurrencyController.class);
         try {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
             List<Cryptocurrency> favourite = null;
@@ -54,14 +53,13 @@ public class UserController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/cryptocurrency/{name}")
+    @PostMapping(value = "/myCryptocurrency/add/{cryptocurrencyName}")
     @PreAuthorize("hasRole('USER')")
-    @ResponseBody
-    public ResponseEntity addCryptocurrencyToUserFavouriteList(@PathVariable String name) {
-        logger.info("Calling /api/cryptocurrency/" + name + " POST method", CryptocurrencyController.class);
+    public ResponseEntity addCryptocurrencyToUserFavouriteList(@PathVariable String cryptocurrencyName) {
+        logger.info("Calling /api/myCryptocurrency/add/" + cryptocurrencyName + " POST method", CryptocurrencyController.class);
         try {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            userService.addCryptocurrencyToFavourite(username, name);
+            userService.addCryptocurrencyToFavourite(username, cryptocurrencyName);
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Server Error " + e, CryptocurrencyController.class);
@@ -69,14 +67,13 @@ public class UserController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/myCryptocurrencies/remove/{name}")
+    @PostMapping(value = "/myCryptocurrency/remove/{cryptocurrencyName}")
     @PreAuthorize("hasRole('USER')")
-    @ResponseBody
-    public ResponseEntity removeCryptocurrencyFromUserFavouriteList(@PathVariable String name) {
-        logger.info("Calling /api/cryptocurrency/" + name + "/removeFavourite POST method", CryptocurrencyController.class);
+    public ResponseEntity removeCryptocurrencyFromUserFavouriteList(@PathVariable String cryptocurrencyName) {
+        logger.info("Calling /api/myCryptocurrency/remove/" + cryptocurrencyName + " POST method", CryptocurrencyController.class);
         try {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            userService.removeCryptocurrencyFromFavourite(username, name);
+            userService.removeCryptocurrencyFromFavourite(username, cryptocurrencyName);
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Server Error " + e, CryptocurrencyController.class);

@@ -39,6 +39,6 @@ public interface UserService {
 
     void addCryptocurrencyToFavourite(String username, String newFavouriteCryptocurrencyName) throws Exception;
 
-    void removeCryptocurrencyFromFavourite(String username, String newFavouriteCryptocurrencyName) throws Exception;
+    void removeCryptocurrencyFromFavourite(String username, String cryptocurrencyNametoRemoveFromFavourite) throws Exception;
 
 }

@@ -14,6 +14,7 @@ import com.wwanat.CryptoWorld.Security.JWT.AuthEntryPointJwt;
 import com.wwanat.CryptoWorld.Security.JWT.JwtUtils;
 import com.wwanat.CryptoWorld.Service.UserService;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -71,9 +72,9 @@ public class UserControllerTest {
     public void setUp() {
         this.cryptocurrencyTestObject = new Cryptocurrency("Bitcoin", "BTC", "bitcoin", 33826.0, 600000000.0, 100.0, 100.0, 100.0, 100000000.0);
         this.testUserObject = new User("user", "user", "user@gmail.com");
-        Set set = new HashSet();
-        set.add(UserRole.ROLE_USER);
-        this.testUserObject.setRoles(set);
+        List roleList = new ArrayList();
+        roleList.add(UserRole.ROLE_USER);
+        this.testUserObject.setRoles(roleList);
         this.testUserObject.addFavouriteCryptocurrency(this.cryptocurrencyTestObject);
     }
 

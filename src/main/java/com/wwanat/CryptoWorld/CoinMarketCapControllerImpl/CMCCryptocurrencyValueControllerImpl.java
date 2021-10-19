@@ -69,8 +69,8 @@ public class CMCCryptocurrencyValueControllerImpl implements CMCCryptocurrencyVa
 
 
     public String makeAPICallForCryptocurrencyValue() throws URISyntaxException, IOException {
-
         String response_content = "";
+
         logger.info("calling " + getCryptoValuesUrl(), CMCCryptocurrencyValueControllerImpl.class);
 
         URIBuilder query = new URIBuilder(getCryptoValuesUrl());
@@ -89,7 +89,7 @@ public class CMCCryptocurrencyValueControllerImpl implements CMCCryptocurrencyVa
             response_content = EntityUtils.toString(entity);
             System.out.println(entity.getContentType());
             EntityUtils.consume(entity);
-            logger.info("call end succsefully ,data fetched", CMCCryptocurrencyValueControllerImpl.class);
+            logger.info("call ended successfully ,data fetched", CMCCryptocurrencyValueControllerImpl.class);
         } finally {
             response.close();
         }
@@ -102,9 +102,9 @@ public class CMCCryptocurrencyValueControllerImpl implements CMCCryptocurrencyVa
         String response_content = "";
         String fullUrlBuild = "";
 
-        fullUrlBuild = buildCryptocurrencyDetailsUrl(cryptocurrency);
-
         logger.info("calling " + fullUrlBuild, CMCCryptocurrencyValueControllerImpl.class);
+
+        fullUrlBuild = buildCryptocurrencyDetailsUrl(cryptocurrency);
 
         URIBuilder query = new URIBuilder(fullUrlBuild);
 
@@ -122,7 +122,7 @@ public class CMCCryptocurrencyValueControllerImpl implements CMCCryptocurrencyVa
             response_content = EntityUtils.toString(entity);
             System.out.println(entity.getContentType());
             EntityUtils.consume(entity);
-            logger.info("call end succsefully ,data fetched", CMCCryptocurrencyValueControllerImpl.class);
+            logger.info("Call end succsefully ,data fetched", CMCCryptocurrencyValueControllerImpl.class);
         } finally {
             response.close();
         }
@@ -138,7 +138,6 @@ public class CMCCryptocurrencyValueControllerImpl implements CMCCryptocurrencyVa
             for (Cryptocurrency c : cryptocurrencies) {
                 urlOut += c.getSlug() + ",";
             }
-            //deleting last comma
             urlOut = urlOut.substring(0, urlOut.length() - 1);
         }
         return urlOut;

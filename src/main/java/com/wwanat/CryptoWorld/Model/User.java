@@ -6,6 +6,7 @@
 package com.wwanat.CryptoWorld.Model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.wwanat.CryptoWorld.Model.Types.UserRole;
@@ -28,7 +29,7 @@ public class User {
 
     private String email;
 
-    private List<UserRole> userTypes = new ArrayList<>();
+    private List<UserRole> role = new ArrayList<>();
 
     @DBRef
     private List<Cryptocurrency> userCryptocurrency = new ArrayList<Cryptocurrency>();
@@ -74,9 +75,13 @@ public class User {
         this.email = email;
     }
 
-    public List<UserRole> getRoles() { return userTypes; }
+    public List<UserRole> getRoles() {
+        return role;
+    }
 
-    public void setRoles(List<UserRole> userTypes) { this.userTypes = userTypes; }
+    public void setRoles(List<UserRole> roles) {
+        this.role = roles;
+    }
 
     public List<Cryptocurrency> getUserCryptocurrency() {
         return userCryptocurrency;
@@ -87,15 +92,20 @@ public class User {
     }
 
     public void addFavouriteCryptocurrency(Cryptocurrency cryptocurrency) {
-        if (cryptocurrency != null) {
-            this.userCryptocurrency.add(cryptocurrency);
-        }
+        this.userCryptocurrency.add(cryptocurrency);
     }
 
-    public void removeFavouriteCryptocurrency(Cryptocurrency cryptocurrency) {
-        if (cryptocurrency != null) {
-            this.userCryptocurrency.remove(cryptocurrency);
+    public boolean removeFavouriteCryptocurrency(Cryptocurrency cryptocurrency) {
+        boolean removed = false;
+        Iterator<Cryptocurrency> iter = this.userCryptocurrency.iterator();
+        while (iter.hasNext()) {
+            Cryptocurrency c = iter.next();
+            if (c.getName().equals(cryptocurrency.getName())) {
+                iter.remove();
+                removed = true;
+            }
         }
+        return removed;
     }
 
 

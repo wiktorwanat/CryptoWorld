@@ -27,7 +27,7 @@ public class NotificationController {
     private NotificationService notificationService;
 
 
-    @RequestMapping(method = RequestMethod.GET, value = "/notifications/myNotifications")
+    @GetMapping(value = "/notifications/myNotifications")
     @PreAuthorize("hasRole('USER')")
     @ResponseBody
     public ResponseEntity getUserNotifications() {
@@ -44,7 +44,7 @@ public class NotificationController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/notifications/myNotifications/{id}")
+    @DeleteMapping(value = "/notifications/myNotifications/{id}")
     @PreAuthorize("hasRole('USER')")
     @ResponseBody
     public ResponseEntity removeNotification(@PathVariable String notificationId) {
@@ -58,7 +58,7 @@ public class NotificationController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/notifications")
+    @PostMapping(value = "/notifications")
     @PreAuthorize("hasRole('USER')")
     @ResponseBody
     public ResponseEntity createNotification(@RequestBody NotificationRequest notificationRequest) {
@@ -74,7 +74,7 @@ public class NotificationController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/notifications/{id}")
+    @PutMapping(value = "/notifications/{id}")
     @PreAuthorize("hasRole('USER')")
     @ResponseBody
     public ResponseEntity updateNotification(@RequestBody Notification notification) {
@@ -88,7 +88,7 @@ public class NotificationController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/notifications")
+    @GetMapping(value = "/notifications")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity getAllNotifications() {

@@ -71,7 +71,7 @@ public class AuthController {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
         List<String> userRoles = userDetails.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toList());
-        logger.info("login request authenticated", AuthController.class);
+        logger.info("User "+ loginRequest.getUsername() + "logged in successfully.", AuthController.class);
         return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), userRoles));
     }
 
@@ -103,7 +103,7 @@ public class AuthController {
                 }
                 user.setRoles(registratingUserRoles);
                 userService.createUser(user);
-                logger.info("Sign up requested ended successfully", AuthController.class);
+                logger.info("Sign up request ended successfully", AuthController.class);
                 return ResponseEntity.ok(new MessageResponse("Successfully registered"));
             }
         }catch(IllegalArgumentException illegalArgumentException){

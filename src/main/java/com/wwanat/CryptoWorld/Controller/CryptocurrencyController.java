@@ -18,13 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Wiktor
@@ -39,7 +33,7 @@ public class CryptocurrencyController {
     @Autowired
     private CryptocurrencyService cryptocurrencyService;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/cryptocurrency")
+    @GetMapping(value = "/cryptocurrency")
     @ResponseBody
     public ResponseEntity allCryptocurriencies() {
 
@@ -54,7 +48,7 @@ public class CryptocurrencyController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/cryptocurrency/{name}")
+    @GetMapping(value = "/cryptocurrency/{name}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity getCryptocurrencyByName(@PathVariable("name") String name) {
@@ -69,7 +63,7 @@ public class CryptocurrencyController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/cryptocurrency/{name}")
+    @DeleteMapping(value ="/cryptocurrency/{name}")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity deleteCryptocurrencyByName(@PathVariable("name") String name) {
@@ -84,7 +78,7 @@ public class CryptocurrencyController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/cryptocurrency/create")
+    @PostMapping(value ="/cryptocurrency/create")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity createCryptocurrency(@RequestBody Cryptocurrency cryptocurrency) {
