@@ -28,9 +28,13 @@ public class Cryptocurrency {
     private double percent_change_24h;
     private double percent_change_7d;
     private double volume24h;
+    private String lastUpdated;
 
     @DBRef
     private CryptocurrencyDetails cryptocurrencyDetails;
+
+    @DBRef
+    private CryptocurrencyHistoricalValue cryptocurrencyHistoricalValue;
 
 
     public Cryptocurrency() {
@@ -45,9 +49,11 @@ public class Cryptocurrency {
         this.percent_change_7d = 0.0;
         this.volume24h = 0.0;
         this.cryptocurrencyDetails = null;
+        this.lastUpdated = null;
+        this.cryptocurrencyHistoricalValue = null;
     }
 
-    public Cryptocurrency(String name, String symbol, String slug, double actualPrice, double marketCap, double percent_change_1h, double percent_change_24h, double percent_change_7d, double volume24h) {
+    public Cryptocurrency(String name, String symbol, String slug, double actualPrice, double marketCap, double percent_change_1h, double percent_change_24h, double percent_change_7d, double volume24h,String lastUpdated) {
         super();
         this.name = name;
         this.symbol = symbol;
@@ -58,6 +64,7 @@ public class Cryptocurrency {
         this.percent_change_24h = percent_change_24h;
         this.percent_change_7d = percent_change_7d;
         this.volume24h = volume24h;
+        this.lastUpdated = lastUpdated;
     }
 
 
@@ -150,9 +157,25 @@ public class Cryptocurrency {
         this.slug = slug;
     }
 
+    public String getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(String lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    public CryptocurrencyHistoricalValue getCryptocurrencyHistoricalValue() {
+        return cryptocurrencyHistoricalValue;
+    }
+
+    public void setCryptocurrencyHistoricalValue(CryptocurrencyHistoricalValue cryptocurrencyHistoricalValue) {
+        this.cryptocurrencyHistoricalValue = cryptocurrencyHistoricalValue;
+    }
+
     @Override
     public String toString() {
-        return "Cryptocurrency{" + "id=" + id + ", name=" + name + ", symbol=" + symbol + ", slug=" + slug + ", actualPrice=" + actualPrice + ", marketCap=" + marketCap + ", percent_change_1h=" + percent_change_1h + ", percent_change_24h=" + percent_change_24h + ", percent_change_7d=" + percent_change_7d + ", volume24h=" + volume24h + ", cryptocurrencyDetails=" + cryptocurrencyDetails + '}';
+        return "Cryptocurrency{" + "id=" + id + ", name=" + name + ", symbol=" + symbol + ", slug=" + slug + ", actualPrice=" + actualPrice + ", marketCap=" + marketCap + ", percent_change_1h=" + percent_change_1h + ", percent_change_24h=" + percent_change_24h + ", percent_change_7d=" + percent_change_7d + ", volume24h=" + volume24h + ", cryptocurrencyDetails=" + cryptocurrencyDetails + ", lastUpdated=" + lastUpdated + '}';
     }
 
     @Override

@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 /**
  * @author Wiktor
  */
-@Document(collection = "cryptoDetails")
+@Document(collection = "crypto_details")
 public class CryptocurrencyDetails {
 
     @Id

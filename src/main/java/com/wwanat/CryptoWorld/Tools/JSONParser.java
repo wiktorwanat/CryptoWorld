@@ -35,7 +35,6 @@ public class JSONParser {
                     String symbol=arr.getJSONObject(i).getString("symbol");
                     String slug=arr.getJSONObject(i).getString("slug");
                     JSONObject quote=arr.getJSONObject(i).getJSONObject("quote");
-                    
                     if(quote!=null){
                         JSONObject fiat=quote.getJSONObject("USD");
                         if(fiat!=null){
@@ -46,7 +45,8 @@ public class JSONParser {
                                 double percent_change_24h=fiat.getDouble("percent_change_24h");
                                 double percent_change_7d=fiat.getDouble("percent_change_7d");
                                 double marketCap=fiat.getDouble("market_cap");
-                                Cryptocurrency c=new Cryptocurrency(name,symbol,slug,actualPrice,marketCap,percent_change_1h,percent_change_24h,percent_change_7d,volume24h);
+                                String lastUpdated=fiat.getString("last_updated");
+                                Cryptocurrency c=new Cryptocurrency(name,symbol,slug,actualPrice,marketCap,percent_change_1h,percent_change_24h,percent_change_7d,volume24h,lastUpdated);
                                 System.out.println(c.toString());
                                 cryptocurrencyList.add(c);
                             }catch(NumberFormatException e){

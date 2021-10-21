@@ -70,7 +70,7 @@ public class UserControllerTest {
 
     @BeforeEach
     public void setUp() {
-        this.cryptocurrencyTestObject = new Cryptocurrency("Bitcoin", "BTC", "bitcoin", 33826.0, 600000000.0, 100.0, 100.0, 100.0, 100000000.0);
+        this.cryptocurrencyTestObject = new Cryptocurrency("Bitcoin", "BTC", "bitcoin", 33826.0, 600000000.0, 100.0, 100.0, 100.0, 100000000.0,null);
         this.testUserObject = new User("user", "user", "user@gmail.com");
         List roleList = new ArrayList();
         roleList.add(UserRole.ROLE_USER);

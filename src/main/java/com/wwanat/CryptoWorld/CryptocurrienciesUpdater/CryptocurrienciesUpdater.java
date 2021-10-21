@@ -80,7 +80,7 @@ public class CryptocurrienciesUpdater {
                 matchingCryptocurrency = cryptocurrencyService.getByName(cryptocurrencyDetail.getName());
                 if (matchingCryptocurrency != null) {
                     matchingCryptocurrency.setCryptocurrencyDetails(cryptocurrencyDetail);
-                    cryptocurrencyService.updateCryptocurrency(matchingCryptocurrency);
+                    cryptocurrencyService.updateDetailsForCryptocurrency(matchingCryptocurrency);
                     logger.info("Cryptocurrency " + matchingCryptocurrency.getName() + " matched with details and updated ", CryptocurrienciesUpdater.class);
                 } else {
                     logger.warn("CryptocurrencyDetails for " + cryptocurrencyDetail.getName() + "not found any matching cryptocurrency to connect", CryptocurrienciesUpdater.class);

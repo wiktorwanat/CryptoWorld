@@ -17,6 +17,4 @@ public interface CryptocurrencyRepository extends MongoRepository<Cryptocurrency
 
     Cryptocurrency findCryptocurrencyByName(String name);
 
-    void deleteCryptocurrencyNotification(String cryptocurrencyId);
-
 }

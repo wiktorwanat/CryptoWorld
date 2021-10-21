@@ -38,21 +38,12 @@ public class CryptocurrencyRepositoryCustomImpl implements CryptocurrencyReposit
             List<Cryptocurrency> list = mongoTemplate.find(query, Cryptocurrency.class);
             if (list.size() == 1) {
                 cryptocurrency = list.get(0);
-                logger.info("Cryptocurrency with given name found in DB", CryptocurrencyRepositoryCustomImpl.class);
+                logger.info("Cryptocurrency with given name "+ name + " found in DB", CryptocurrencyRepositoryCustomImpl.class);
             } else {
-                logger.info("Cryptocurrency with given name not found in DB", CryptocurrencyRepositoryCustomImpl.class);
+                logger.info("Cryptocurrency with given name "+ name + " not found in DB", CryptocurrencyRepositoryCustomImpl.class);
             }
         }
         return cryptocurrency;
-    }
-
-    @Override
-    public void deleteCryptocurrencyNotification(String cryptocurrencyId) {
-        if (cryptocurrencyId != null) {
-            final Query query = new Query();
-            query.addCriteria(Criteria.where("cryptocurrency").is(cryptocurrencyId));
-            mongoTemplate.findAllAndRemove(query, Notification.class);
-        }
     }
 
 }

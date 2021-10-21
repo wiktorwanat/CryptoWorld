@@ -38,7 +38,7 @@ public class CryptocurrencyDetailsRepositoryCustomImpl implements Cryptocurrency
             if (list.size() == 1) {
                 cryptocurrencyDetails = list.get(0);
             } else {
-                logger.error("CryptocurrencyDetails with given name not found in DB", CryptocurrencyDetailsRepositoryCustomImpl.class);
+                logger.warn("CryptocurrencyDetails with given name not found in DB", CryptocurrencyDetailsRepositoryCustomImpl.class);
             }
         }
         return cryptocurrencyDetails;

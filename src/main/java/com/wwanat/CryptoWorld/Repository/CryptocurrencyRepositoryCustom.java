@@ -14,6 +14,4 @@ public interface CryptocurrencyRepositoryCustom {
 
     Cryptocurrency findCryptocurrencyByName(String name);
 
-    void deleteCryptocurrencyNotification(String cryptocurrencyId);
-
 }

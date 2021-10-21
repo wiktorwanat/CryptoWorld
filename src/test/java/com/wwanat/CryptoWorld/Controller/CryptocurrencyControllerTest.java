@@ -71,7 +71,7 @@ public class CryptocurrencyControllerTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        this.cryptocurrencyTestObject = new Cryptocurrency("Bitcoin", "BTC", "bitcoin", 33826.0, 600000000.0, 100.0, 100.0, 100.0, 100000000.0);
+        this.cryptocurrencyTestObject = new Cryptocurrency("Bitcoin", "BTC", "bitcoin", 33826.0, 600000000.0, 100.0, 100.0, 100.0, 100000000.0,null);
     }
 
     public CryptocurrencyControllerTest() {

@@ -19,6 +19,8 @@ public interface CryptocurrencyService {
 
     Cryptocurrency updateCryptocurrency(Cryptocurrency cryptocurrency) throws Exception;
 
+    Cryptocurrency updateDetailsForCryptocurrency(Cryptocurrency cryptocurrency) throws Exception;
+
     void removeCryptocurrency(String id) throws Exception;
 
     List<Cryptocurrency> getAll() throws Exception;
