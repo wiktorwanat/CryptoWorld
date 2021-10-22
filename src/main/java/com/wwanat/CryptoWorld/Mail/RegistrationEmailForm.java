@@ -23,5 +23,4 @@ public class RegistrationEmailForm {
         return restriationEmailContent;
     }
 
-
 }

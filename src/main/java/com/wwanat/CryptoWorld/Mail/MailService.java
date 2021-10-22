@@ -5,17 +5,20 @@
  */
 package com.wwanat.CryptoWorld.Mail;
 
+import com.wwanat.CryptoWorld.Model.Report;
 import com.wwanat.CryptoWorld.Model.User;
 import com.wwanat.CryptoWorld.Model.Notification;
-
 import javax.mail.MessagingException;
 
 /**
  * @author Wiktor
  */
+
 public interface MailService {
 
     void sendRegistrationMail(User user) throws MessagingException;
 
     void sendNotificationMail(User user, Notification notification) throws MessagingException;
+
+    void sendReportMail(User user, Report report) throws MessagingException;
 }

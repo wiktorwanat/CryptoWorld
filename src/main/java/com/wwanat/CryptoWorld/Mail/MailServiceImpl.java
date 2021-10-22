@@ -5,6 +5,7 @@
  */
 package com.wwanat.CryptoWorld.Mail;
 
+import com.wwanat.CryptoWorld.Model.Report;
 import com.wwanat.CryptoWorld.Model.User;
 import com.wwanat.CryptoWorld.Model.Notification;
 
@@ -66,5 +67,10 @@ public class MailServiceImpl implements MailService {
         } else {
             logger.error("Notification email failed to send", MailServiceImpl.class);
         }
+    }
+
+    @Override
+    public void sendReportMail(User user, Report report) throws MessagingException {
+
     }
 }
