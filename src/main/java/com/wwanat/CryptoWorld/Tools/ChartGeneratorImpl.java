@@ -47,10 +47,10 @@ public class ChartGeneratorImpl implements ChartGenerator{
             JFreeChart chart  = createChart(dataset,cryptocurrency);
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd-HH:mm:ss");
             LocalDateTime now = LocalDateTime.now();
-            path = chartPath.concat(cryptocurrency.getName()).concat("-"+now).concat(".png");
             try {
+                path = chartPath.concat(cryptocurrency.getName()).concat("-"+now).concat(".png");
                 ChartUtils.saveChartAsJPEG(new File(path), chart, 450, 400);
-                logger.error("Chart saved",ChartGeneratorImpl.class);
+                logger.info("Chart saved",ChartGeneratorImpl.class);
             }catch(IOException e){
                 logger.error("Cannot create chart in given destination",ChartGeneratorImpl.class);
             }

@@ -88,7 +88,7 @@ public class NotificationController {
         }
     }
 
-    @GetMapping(value = "/notifications")
+    @GetMapping(value = "/notifications/all")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity getAllNotifications() {
