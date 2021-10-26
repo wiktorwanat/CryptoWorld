@@ -54,7 +54,6 @@ public class JSONParser {
                             }
                         }
                     }
-                    
                 }
             }else{
                 System.out.println("Server error on CoinMarketCupSide");
@@ -78,13 +77,12 @@ public class JSONParser {
                     while(keys.hasNext()){
                             String key = keys.next();
                         if (data.get(key) instanceof JSONObject) {
-                               String name=data.getJSONObject(key).getString("name");
+                            String name=data.getJSONObject(key).getString("name");
                             String description=data.getJSONObject(key).getString("description");
                             String logoUrl=data.getJSONObject(key).getString("logo");
                             String dateOfCreation=data.getJSONObject(key).getString("date_added");
                             urls=data.getJSONObject(key).getJSONObject("urls");
                             if(urls!=null){
-                                if(urls.length()==9){
                                     JSONArray website=urls.getJSONArray("website");
                                     String websiteUrl="";
                                     if(website.length()>0){
@@ -117,8 +115,9 @@ public class JSONParser {
                                     }
                                     CryptocurrencyDetails cryptocurrencyDetails=new CryptocurrencyDetails(name,description,logoUrl,websiteUrl,twitterUrl,forumUrl,redditUrl,technicalDocumentationUrl,sourceCodeUrl,dateOfCreation);
                                     cryptocurrencyDetailsList.add(cryptocurrencyDetails);
-                                }
-                            }   
+                            }else{
+                                logger.info("Urls are missing!");
+                            }
                         }
                     }
                 }else{

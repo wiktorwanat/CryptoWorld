@@ -122,7 +122,7 @@ public class CMCCryptocurrencyValueControllerImpl implements CMCCryptocurrencyVa
             response_content = EntityUtils.toString(entity);
             System.out.println(entity.getContentType());
             EntityUtils.consume(entity);
-            logger.info("Call end succsefully ,data fetched", CMCCryptocurrencyValueControllerImpl.class);
+            logger.info("Call ended successfully ,data fetched", CMCCryptocurrencyValueControllerImpl.class);
         } finally {
             response.close();
         }
