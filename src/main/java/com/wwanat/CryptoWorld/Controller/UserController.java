@@ -8,9 +8,11 @@ package com.wwanat.CryptoWorld.Controller;
 import com.wwanat.CryptoWorld.HttpModels.NotificationRequest;
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
 import com.wwanat.CryptoWorld.Model.Notification;
+import com.wwanat.CryptoWorld.Model.User;
 import com.wwanat.CryptoWorld.Service.NotificationService;
 import com.wwanat.CryptoWorld.Service.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -75,6 +77,17 @@ public class UserController {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
             userService.removeCryptocurrencyFromFavourite(username, cryptocurrencyName);
             return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Server Error " + e, CryptocurrencyController.class);
+            return new ResponseEntity(HttpStatus.valueOf(404));
+        }
+    }
+
+    @GetMapping(value = "/users/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity getAllUsers(){
+        try{
+            return new ResponseEntity(userService.getUsers(),HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Server Error " + e, CryptocurrencyController.class);
             return new ResponseEntity(HttpStatus.valueOf(404));
