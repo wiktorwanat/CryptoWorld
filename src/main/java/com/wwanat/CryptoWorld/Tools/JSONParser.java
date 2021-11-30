@@ -58,8 +58,6 @@ public class JSONParser {
             }else{
                 System.out.println("Server error on CoinMarketCupSide");
             }
-            
-            
         }
         return cryptocurrencyList;
     }

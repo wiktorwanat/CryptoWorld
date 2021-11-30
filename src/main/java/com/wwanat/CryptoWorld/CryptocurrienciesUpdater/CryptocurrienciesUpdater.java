@@ -72,7 +72,7 @@ public class CryptocurrienciesUpdater {
         List<Cryptocurrency> cryptocurrencies = new ArrayList<Cryptocurrency>();
         try {
             cryptocurrencies = cryptocurrencyService.getAll();
-            CNCresponse = coinMarketCapController.makeAPICallForCryptocurrenyDetails(cryptocurrencies);
+            CNCresponse = coinMarketCapController.makeAPICallForCryptocurrencyDetails(cryptocurrencies);
             List<CryptocurrencyDetails> cryptocurrenciesDetails = JSONParser.fetchCryptocurrenciesDetailsFromJSONResponse(CNCresponse);
             Cryptocurrency matchingCryptocurrency = null;
             for (CryptocurrencyDetails cryptocurrencyDetail : cryptocurrenciesDetails) {

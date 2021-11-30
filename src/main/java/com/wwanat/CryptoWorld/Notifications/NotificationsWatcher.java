@@ -36,14 +36,16 @@ public class NotificationsWatcher {
                 boolean notificationStatus = false;
                 Cryptocurrency notificationCryptocurrency = notification.getCryptocurrency();
                 if (notificationCryptocurrency != null) {
-                    if (notification.getNotificationType().equals(NotificationType.OVER) && notificationCryptocurrency.getActualPrice() >= notification.getValue() || notification.getNotificationType().equals(NotificationType.BELOW) && notificationCryptocurrency.getActualPrice() <= notification.getValue()) {
+                    if (notification.getNotificationType().equals(NotificationType.OVER) && notificationCryptocurrency.getActualPrice() >= notification.getValue() ||
+                            notification.getNotificationType().equals(NotificationType.BELOW) && notificationCryptocurrency.getActualPrice() <= notification.getValue()) {
                         notificationStatus = true;
                     }
                     if (notificationStatus == true) {
                         try {
                             logger.info("Notification " + notification.getId() + " activated- sending notification to user", NotificationsWatcher.class);
                             mailService.sendNotificationMail(notification.getNotifcationOwner(), notification);
-                        } catch (MessagingException e) {
+                            notificationService.delete(notification);
+                        } catch (Exception e) {
                             logger.error(e.getMessage(), NotificationsWatcher.class);
                         }
                     }

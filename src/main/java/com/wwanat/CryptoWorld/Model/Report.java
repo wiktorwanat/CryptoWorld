@@ -6,14 +6,17 @@ public class Report {
 
     public double RSI;
 
-    public double MRSI;
+    public double MA;
+
+    public double SMA;
 
     public JFreeChart chart;
 
-    public Report(double rsi, double mrsi, JFreeChart chart) {
+    public Report(double rsi, double mrsi, double sma, JFreeChart chart) {
         this.chart = chart;
         this.RSI = rsi;
-        this.MRSI = mrsi;
+        this.MA = mrsi;
+        this.SMA = sma;
     }
 
 }

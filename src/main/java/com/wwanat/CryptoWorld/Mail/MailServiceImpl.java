@@ -61,7 +61,7 @@ public class MailServiceImpl implements MailService {
             mimeMessageHelper.setTo(user.getEmail());
             mimeMessageHelper.setSubject(NotificationMailForm.notificationMailTitle);
             String text = NotificationMailForm.getNotificationEmailContent(user, notification);
-            mimeMessageHelper.setText(text);
+            mimeMessageHelper.setText(text,true);
             javaMailSender.send(mimeMessage);
             logger.info("Notification email send successfully", MailServiceImpl.class);
         } else {

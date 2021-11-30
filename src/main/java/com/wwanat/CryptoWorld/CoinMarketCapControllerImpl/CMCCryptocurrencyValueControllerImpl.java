@@ -98,7 +98,7 @@ public class CMCCryptocurrencyValueControllerImpl implements CMCCryptocurrencyVa
 
 
     @Override
-    public String makeAPICallForCryptocurrenyDetails(List<Cryptocurrency> cryptocurrency) throws URISyntaxException, IOException {
+    public String makeAPICallForCryptocurrencyDetails(List<Cryptocurrency> cryptocurrency) throws URISyntaxException, IOException {
         String response_content = "";
         String fullUrlBuild = "";
 

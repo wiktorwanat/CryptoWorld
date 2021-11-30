@@ -14,10 +14,10 @@ import java.util.List;
 /**
  * @author Wiktor
  */
-//CMC stand for CoinMarketCup
 public interface CMCCryptocurrencyValueController {
 
     public String makeAPICallForCryptocurrencyValue() throws URISyntaxException, IOException;
 
-    public String makeAPICallForCryptocurrenyDetails(List<Cryptocurrency> cryptocurrency) throws URISyntaxException, IOException;
+    public String makeAPICallForCryptocurrencyDetails(List<Cryptocurrency> cryptocurrency) throws URISyntaxException, IOException;
+
 }

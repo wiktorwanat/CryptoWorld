@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -92,4 +93,21 @@ public class CryptocurrencyController {
         }
     }
 
+
+    @PostMapping(value ="/cryptocurrency/report")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @ResponseBody
+    public ResponseEntity orderReport() {
+        logger.info("Calling /api/cryptocurrency/report POST method", CryptocurrencyController.class);
+        try {
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+            //generowanie raportu dla danego goscia
+
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Server Error while generating cryptocurrecny report" + e, CryptocurrencyController.class);
+            return new ResponseEntity(HttpStatus.valueOf(404));
+        }
+    }
 }
