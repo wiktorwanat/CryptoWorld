@@ -110,7 +110,7 @@ public class NotificationServiceImpl implements NotificationService {
         List<Notification> userNotifications = new ArrayList<>();
         if(notificationOwnerId!=null) {
             for (Notification n : new ArrayList<>(getAllNotifications())) {
-                if (!n.getNotifcationOwner().getId().equals(notificationOwnerId)) {
+                if (!n.getNotificationOwner().getId().equals(notificationOwnerId)) {
                     userNotifications.add(n);
                 }
             }

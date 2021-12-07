@@ -9,6 +9,8 @@ import com.wwanat.CryptoWorld.HttpModels.NotificationRequest;
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
 import com.wwanat.CryptoWorld.Model.Notification;
 import com.wwanat.CryptoWorld.Model.User;
+import com.wwanat.CryptoWorld.Reports.CryptocurrencyReportGenerator;
+import com.wwanat.CryptoWorld.Service.CryptocurrencyService;
 import com.wwanat.CryptoWorld.Service.NotificationService;
 import com.wwanat.CryptoWorld.Service.UserService;
 
@@ -39,6 +41,12 @@ public class UserController {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private CryptocurrencyReportGenerator cryptocurrencyReportGenerator;
+
+    @Autowired
+    private CryptocurrencyService cryptocurrencyService;
 
     @GetMapping(value = "/myCryptocurrency")
     @PreAuthorize("hasRole('USER')")
@@ -90,6 +98,23 @@ public class UserController {
             return new ResponseEntity(userService.getUsers(),HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Server Error " + e, CryptocurrencyController.class);
+            return new ResponseEntity(HttpStatus.valueOf(404));
+        }
+    }
+
+    @PostMapping(value ="/cryptocurrency/{cryptocurrencyName}/report")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @ResponseBody
+    public ResponseEntity orderReport(@PathVariable("cryptocurrencyName") String cryptocurrencyName) {
+        logger.info("Calling /api/cryptocurrency/report POST method", CryptocurrencyController.class);
+        try {
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            User user = userService.getByUsername(username);
+            Cryptocurrency cryptocurrency = cryptocurrencyService.getByName(cryptocurrencyName);
+            cryptocurrencyReportGenerator.generateCryptocurrencyReport(user, cryptocurrency);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Server Error while generating cryptocurrency report" + e, CryptocurrencyController.class);
             return new ResponseEntity(HttpStatus.valueOf(404));
         }
     }

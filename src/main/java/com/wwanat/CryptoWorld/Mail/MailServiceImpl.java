@@ -5,19 +5,26 @@
  */
 package com.wwanat.CryptoWorld.Mail;
 
-import com.wwanat.CryptoWorld.Model.Report;
+import com.wwanat.CryptoWorld.Model.Cryptocurrency;
+import com.wwanat.CryptoWorld.Reports.Report;
 import com.wwanat.CryptoWorld.Model.User;
 import com.wwanat.CryptoWorld.Model.Notification;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.mail.util.ByteArrayDataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * @author Wiktor
@@ -37,8 +44,8 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public void sendRegistrationMail(User user) throws MessagingException {
-        logger.info("Trying to send registration email", MailServiceImpl.class);
         if (user != null) {
+            logger.info("Trying to send registration email", MailServiceImpl.class);
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setTo(user.getEmail());
@@ -54,14 +61,14 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public void sendNotificationMail(User user, Notification notification) throws MessagingException {
-        logger.info("Trying to send notification to " + user.getUsername());
         if (user != null && notification != null) {
+            logger.info("Trying to send notification to " + user.getUsername());
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setTo(user.getEmail());
             mimeMessageHelper.setSubject(NotificationMailForm.notificationMailTitle);
             String text = NotificationMailForm.getNotificationEmailContent(user, notification);
-            mimeMessageHelper.setText(text,true);
+            mimeMessageHelper.setText(text, true);
             javaMailSender.send(mimeMessage);
             logger.info("Notification email send successfully", MailServiceImpl.class);
         } else {
@@ -70,7 +77,26 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public void sendReportMail(User user, Report report) throws MessagingException {
-
+    public void sendReportMail(User user, Cryptocurrency cryptocurrency, Report report) throws MessagingException {
+        if (user != null && report != null) {
+            logger.info("Trying to send cryptocurrency report to " + user.getUsername());
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+            mimeMessageHelper.setTo(user.getEmail());
+            mimeMessageHelper.setSubject(ReportMailForm.reportMailTitle);
+            String text = ReportMailForm.getReportEmailContent(cryptocurrency, report);
+            mimeMessageHelper.setText(text, true);
+            try {
+                Path path = Paths.get(report.getChartpath());
+                byte[] fileContent = Files.readAllBytes(path);
+                mimeMessageHelper.addAttachment("chart.png",new ByteArrayResource(fileContent));
+            }catch(Exception e){
+                logger.warn("Cannot convert png file into byte - failed to attach chart to cryptocurrency report",MailServiceImpl.class);
+            }
+            javaMailSender.send(mimeMessage);
+            logger.info("Notification email send successfully", MailServiceImpl.class);
+        } else {
+            logger.error("Notification email failed to send", MailServiceImpl.class);
+        }
     }
 }

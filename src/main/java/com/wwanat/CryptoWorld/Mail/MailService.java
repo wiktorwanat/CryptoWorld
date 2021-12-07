@@ -5,9 +5,11 @@
  */
 package com.wwanat.CryptoWorld.Mail;
 
-import com.wwanat.CryptoWorld.Model.Report;
+import com.wwanat.CryptoWorld.Model.Cryptocurrency;
+import com.wwanat.CryptoWorld.Reports.Report;
 import com.wwanat.CryptoWorld.Model.User;
 import com.wwanat.CryptoWorld.Model.Notification;
+
 import javax.mail.MessagingException;
 
 /**
@@ -20,5 +22,5 @@ public interface MailService {
 
     void sendNotificationMail(User user, Notification notification) throws MessagingException;
 
-    void sendReportMail(User user, Report report) throws MessagingException;
+    void sendReportMail(User user, Cryptocurrency cryptocurrency, Report report) throws MessagingException;
 }

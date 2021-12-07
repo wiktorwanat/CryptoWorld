@@ -6,6 +6,8 @@
 package com.wwanat.CryptoWorld.Controller;
 
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
+import com.wwanat.CryptoWorld.Reports.CryptocurrencyReportGenerator;
+import com.wwanat.CryptoWorld.Reports.CryptocurrencyReportGeneratorImpl;
 import com.wwanat.CryptoWorld.Service.CryptocurrencyService;
 
 import java.util.ArrayList;
@@ -64,7 +66,7 @@ public class CryptocurrencyController {
         }
     }
 
-    @DeleteMapping(value ="/cryptocurrency/{name}")
+    @DeleteMapping(value = "/cryptocurrency/{name}")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity deleteCryptocurrencyByName(@PathVariable("name") String name) {
@@ -79,7 +81,7 @@ public class CryptocurrencyController {
         }
     }
 
-    @PostMapping(value ="/cryptocurrency/create")
+    @PostMapping(value = "/cryptocurrency/create")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity createCryptocurrency(@RequestBody Cryptocurrency cryptocurrency) {
@@ -93,21 +95,4 @@ public class CryptocurrencyController {
         }
     }
 
-
-    @PostMapping(value ="/cryptocurrency/report")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @ResponseBody
-    public ResponseEntity orderReport() {
-        logger.info("Calling /api/cryptocurrency/report POST method", CryptocurrencyController.class);
-        try {
-            String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
-            //generowanie raportu dla danego goscia
-
-            return new ResponseEntity(HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Server Error while generating cryptocurrecny report" + e, CryptocurrencyController.class);
-            return new ResponseEntity(HttpStatus.valueOf(404));
-        }
-    }
 }

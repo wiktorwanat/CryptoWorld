@@ -71,7 +71,7 @@ public class CryptocurrencyControllerTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        this.cryptocurrencyTestObject = new Cryptocurrency("Bitcoin", "BTC", "bitcoin", 33826.0, 600000000.0, 100.0, 100.0, 100.0, 100000000.0,null);
+        this.cryptocurrencyTestObject = new Cryptocurrency("Bitcoin", "BTC", "bitcoin", 33826.0, 600000000.0, 100.0, 100.0, 100.0, 100000000.0, null);
     }
 
     public CryptocurrencyControllerTest() {
@@ -119,15 +119,6 @@ public class CryptocurrencyControllerTest {
                 .andExpect(status().is(404));
     }
 
-    @WithAnonymousUser
-    @Test
-    public void getCryptocurrencyByNameTest_withAnonymousUser_shouldReturnEmptyResponseWithUnAuthorizeStatus() throws Exception {
-        given(cryptocurrencyService.getByName(Mockito.any(String.class))).willReturn(this.cryptocurrencyTestObject);
-        mvc.perform(get(apiUrl + "cryptocurrency/Bitcoin")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(403));
-    }
-
     @WithMockUser(username = "1050106266",
             password = "123456",
             authorities = "ROLE_ADMIN")
@@ -146,9 +137,9 @@ public class CryptocurrencyControllerTest {
         Assert.assertTrue(responseObject.equals(this.cryptocurrencyTestObject));
     }
 
-    @WithAnonymousUser
+    @WithMockUser(username = "admin", password = "admin")
     @Test
-    public void deleteCryptocurrencyByNameTest_withAnonymousUser_shouldReturnUnAuthorizeStatus() throws Exception {
+    public void deleteCryptocurrencyByNameTest_withUnAuthorizeUser_shouldReturnUnAuthorizeStatus() throws Exception {
         doNothing().when(cryptocurrencyService).removeCryptocurrencyByName(Mockito.any(String.class));
         mvc.perform(MockMvcRequestBuilders.delete(apiUrl + "cryptocurrency/Bitcoin")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -157,7 +148,7 @@ public class CryptocurrencyControllerTest {
 
     @WithMockUser(username = "admin", password = "admin", authorities = "ROLE_ADMIN")
     @Test
-    public void deleteCryptocurrencyByNameTest_accesWithAdmin_shouldCorrectlyDeleteCryptocurrencyAndReturnOK() throws Exception {
+    public void deleteCryptocurrencyByNameTest_accessWithAdmin_shouldCorrectlyDeleteCryptocurrencyAndReturnOK() throws Exception {
         doNothing().when(cryptocurrencyService).removeCryptocurrencyByName(Mockito.any(String.class));
         mvc.perform(MockMvcRequestBuilders.delete(apiUrl + "cryptocurrency/Bitcoin")
                         .contentType(MediaType.APPLICATION_JSON))

@@ -43,7 +43,7 @@ public class NotificationsWatcher {
                     if (notificationStatus == true) {
                         try {
                             logger.info("Notification " + notification.getId() + " activated- sending notification to user", NotificationsWatcher.class);
-                            mailService.sendNotificationMail(notification.getNotifcationOwner(), notification);
+                            mailService.sendNotificationMail(notification.getNotificationOwner(), notification);
                             notificationService.delete(notification);
                         } catch (Exception e) {
                             logger.error(e.getMessage(), NotificationsWatcher.class);

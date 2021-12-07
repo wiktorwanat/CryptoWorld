@@ -28,7 +28,7 @@ public class NotificationController {
 
 
     @GetMapping(value = "/notifications/myNotifications")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity getUserNotifications() {
         logger.info("Calling /api/myNotifications GET method", CryptocurrencyController.class);
@@ -37,15 +37,14 @@ public class NotificationController {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
             userNotifications = notificationService.getSpecificUserNotifications(username);
             return new ResponseEntity(userNotifications, HttpStatus.OK);
-            //dodac obsluge odpowiedniego wyjatku illegal argument
         } catch (Exception e) {
             logger.error("Server Error " + e, CryptocurrencyController.class);
             return new ResponseEntity(userNotifications, HttpStatus.valueOf(404));
         }
     }
 
-    @DeleteMapping(value = "/notifications/myNotifications/{id}")
-    @PreAuthorize("hasRole('USER')")
+    @DeleteMapping(value = "/notifications/myNotifications/{notificationId}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity removeNotification(@PathVariable String notificationId) {
         logger.info("Calling /api/myNotifications" + notificationId + " GET method", CryptocurrencyController.class);
@@ -59,13 +58,12 @@ public class NotificationController {
     }
 
     @PostMapping(value = "/notifications")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity createNotification(@RequestBody NotificationRequest notificationRequest) {
         logger.info("Calling /api/notifications POST method -creating notification", CryptocurrencyController.class);
         try {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            //trza to sprawdzic czy przypadkiem ten owner nie jest tam pusty w notificationrequest
             notificationService.createNotificationFromRequest(notificationRequest);
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
@@ -74,8 +72,8 @@ public class NotificationController {
         }
     }
 
-    @PutMapping(value = "/notifications/{id}")
-    @PreAuthorize("hasRole('USER')")
+    @PutMapping(value = "/notifications/update")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity updateNotification(@RequestBody Notification notification) {
         logger.info("Calling /api/notifications/id PUT method", CryptocurrencyController.class);

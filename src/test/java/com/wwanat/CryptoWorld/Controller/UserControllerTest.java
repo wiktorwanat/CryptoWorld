@@ -10,8 +10,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wwanat.CryptoWorld.Model.Cryptocurrency;
 import com.wwanat.CryptoWorld.Model.Types.UserRole;
 import com.wwanat.CryptoWorld.Model.User;
+import com.wwanat.CryptoWorld.Reports.CryptocurrencyReportGenerator;
 import com.wwanat.CryptoWorld.Security.JWT.AuthEntryPointJwt;
 import com.wwanat.CryptoWorld.Security.JWT.JwtUtils;
+import com.wwanat.CryptoWorld.Service.CryptocurrencyService;
+import com.wwanat.CryptoWorld.Service.NotificationService;
 import com.wwanat.CryptoWorld.Service.UserService;
 
 import java.util.ArrayList;
@@ -26,6 +29,7 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willAnswer;
 
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
 import static org.mockito.Mockito.doNothing;
@@ -34,8 +38,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -45,6 +54,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * @author Wiktor
  */
+@RunWith(SpringRunner.class)
 @WebMvcTest(value = UserController.class)
 public class UserControllerTest {
 
@@ -52,6 +62,9 @@ public class UserControllerTest {
 
     private Cryptocurrency cryptocurrencyTestObject;
     private User testUserObject;
+
+    @MockBean
+    private UserService userService;
 
     @MockBean
     private JwtUtils jwtUtils;
@@ -63,14 +76,20 @@ public class UserControllerTest {
     private UserDetailsService userDetailsService;
 
     @MockBean
-    private UserService userService;
+    private NotificationService notificationService;
+
+    @MockBean
+    private CryptocurrencyReportGenerator cryptocurrencyReportGenerator;
+
+    @MockBean
+    private CryptocurrencyService cryptocurrencyService;
 
     @Autowired
     private MockMvc mvc;
 
     @BeforeEach
     public void setUp() {
-        this.cryptocurrencyTestObject = new Cryptocurrency("Bitcoin", "BTC", "bitcoin", 33826.0, 600000000.0, 100.0, 100.0, 100.0, 100000000.0,null);
+        this.cryptocurrencyTestObject = new Cryptocurrency("Bitcoin", "BTC", "bitcoin", 33826.0, 600000000.0, 100.0, 100.0, 100.0, 100000000.0, null);
         this.testUserObject = new User("user", "user", "user@gmail.com");
         List roleList = new ArrayList();
         roleList.add(UserRole.ROLE_USER);
@@ -78,12 +97,16 @@ public class UserControllerTest {
         this.testUserObject.addFavouriteCryptocurrency(this.cryptocurrencyTestObject);
     }
 
+    public UserControllerTest() {
+    }
+
+
     @WithMockUser(username = "user", password = "user", authorities = "ROLE_USER")
     @Test
     public void getUserFavouriteCryptocurrenciesListTest_WithAuthorizedUser_shouldCorrectlyReturnFavouriteCryptocurrenciesListWithOkStatus() throws Exception {
         given(this.userService.getUserFavouriteCryptocurrencies(Mockito.any(String.class))).willReturn(this.testUserObject.getUserCryptocurrency());
 
-        String response = mvc.perform(get(this.apiUrl + "myCryptocurrencies")
+        String response = mvc.perform(get(this.apiUrl + "myCryptocurrency")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
@@ -100,7 +123,7 @@ public class UserControllerTest {
     public void getUserFavouriteCryptocurrenciesListTest_WithUnAuthorizedUser_shouldReturnEmptyResponseWith403Status() throws Exception {
         given(this.userService.getUserFavouriteCryptocurrencies(Mockito.any(String.class))).willReturn(this.testUserObject.getUserCryptocurrency());
 
-        String response = mvc.perform(get(this.apiUrl + "myCryptocurrencies")
+        String response = mvc.perform(get(this.apiUrl + "myCryptocurrency")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(403))
                 .andReturn().getResponse().getContentAsString();
@@ -115,7 +138,7 @@ public class UserControllerTest {
             throw new Exception();
         });
 
-        mvc.perform(get(this.apiUrl + "myCryptocurrencies")
+        mvc.perform(get(this.apiUrl + "myCryptocurrency")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
     }
@@ -125,7 +148,7 @@ public class UserControllerTest {
     public void addCryptocurrencyToUserFavouriteListTest_WithAuthorizedUser_shouldEndWithOkStatus() throws Exception {
         doNothing().when(this.userService).addCryptocurrencyToFavourite(Mockito.any(String.class), Mockito.any(String.class));
 
-        mvc.perform(MockMvcRequestBuilders.post(this.apiUrl + "cryptocurrency/Bitcoin")
+        mvc.perform(MockMvcRequestBuilders.post(this.apiUrl + "myCryptocurrency/add/Bitcoin")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -134,7 +157,7 @@ public class UserControllerTest {
     @Test
     public void addCryptocurrencyToUserFavouriteListTest_WithUnAuthorizedUser_shouldReturnEmptyResponseWith403Status() throws Exception {
         doNothing().when(this.userService).addCryptocurrencyToFavourite(Mockito.any(String.class), Mockito.any(String.class));
-        String response = mvc.perform(MockMvcRequestBuilders.post(this.apiUrl + "cryptocurrency/Bitcoin")
+        String response = mvc.perform(MockMvcRequestBuilders.post(this.apiUrl + "myCryptocurrency/add/Bitcoin")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(403))
                 .andReturn().getResponse().getContentAsString();
@@ -149,7 +172,7 @@ public class UserControllerTest {
             throw new Exception();
         }).willDoNothing().given(this.userService).addCryptocurrencyToFavourite(Mockito.any(String.class), Mockito.any(String.class));
 
-        mvc.perform(MockMvcRequestBuilders.post(this.apiUrl + "cryptocurrency/Bitcoin")
+        mvc.perform(MockMvcRequestBuilders.post(this.apiUrl + "myCryptocurrency/add/Bitcoin")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
     }
@@ -159,7 +182,7 @@ public class UserControllerTest {
     public void removeCryptocurrencyFromUserFavouriteListTest_WithAuthorizedUser_shouldEndWithOkStatus() throws Exception {
         doNothing().when(this.userService).removeCryptocurrencyFromFavourite(Mockito.any(String.class), Mockito.any(String.class));
 
-        mvc.perform(MockMvcRequestBuilders.delete(this.apiUrl + "myCryptocurrencies/remove/Bitcoin")
+        mvc.perform(MockMvcRequestBuilders.post(this.apiUrl + "myCryptocurrency/remove/Bitcoin")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -168,7 +191,7 @@ public class UserControllerTest {
     @Test
     public void removeCryptocurrencyFromUserFavouriteListTest_WithUnAuthorizedUser_shouldReturnEmptyResponseWith403Status() throws Exception {
         doNothing().when(this.userService).removeCryptocurrencyFromFavourite(Mockito.any(String.class), Mockito.any(String.class));
-        String response = mvc.perform(MockMvcRequestBuilders.delete(this.apiUrl + "myCryptocurrencies/remove/Bitcoin")
+        String response = mvc.perform(MockMvcRequestBuilders.post(this.apiUrl + "myCryptocurrency/remove/Bitcoin")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(403))
                 .andReturn().getResponse().getContentAsString();
@@ -183,7 +206,7 @@ public class UserControllerTest {
             throw new Exception();
         }).willDoNothing().given(this.userService).removeCryptocurrencyFromFavourite(Mockito.any(String.class), Mockito.any(String.class));
 
-        mvc.perform(MockMvcRequestBuilders.delete(this.apiUrl + "myCryptocurrencies/remove/Bitcoin")
+        mvc.perform(MockMvcRequestBuilders.post(this.apiUrl + "myCryptocurrency/remove/Bitcoin")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
     }

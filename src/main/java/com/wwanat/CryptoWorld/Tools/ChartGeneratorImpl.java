@@ -11,15 +11,14 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.title.TextTitle;
-import org.jfree.data.time.Day;
-import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
-import org.jfree.data.time.TimeSeriesDataItem;
+import org.jfree.data.time.*;
+import org.jfree.data.xy.IntervalXYDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.io.File;
@@ -31,6 +30,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
+@Service
 public class ChartGeneratorImpl implements ChartGenerator{
 
     private Logger logger = LoggerFactory.getLogger(ChartGeneratorImpl.class);
@@ -48,7 +48,9 @@ public class ChartGeneratorImpl implements ChartGenerator{
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd-HH:mm:ss");
             LocalDateTime now = LocalDateTime.now();
             try {
+                System.out.println('e');
                 path = chartPath.concat(cryptocurrency.getName()).concat("-"+now).concat(".png");
+                System.out.println("path");
                 ChartUtils.saveChartAsJPEG(new File(path), chart, 450, 400);
                 logger.info("Chart saved",ChartGeneratorImpl.class);
             }catch(IOException e){
@@ -97,13 +99,13 @@ public class ChartGeneratorImpl implements ChartGenerator{
         return chart;
     }
 
-    private XYDataset createDataset(CryptocurrencyHistoricalValue cryptocurrencyHistoricalValue){
-        TimeSeriesCollection dataset = null;
+    private IntervalXYDataset createDataset(CryptocurrencyHistoricalValue cryptocurrencyHistoricalValue){
+        TimePeriodValuesCollection dataset = null;
         if(cryptocurrencyHistoricalValue!=null){
-            TimeSeries series = new TimeSeries("Value");
+            TimePeriodValues series = new TimePeriodValues("Value");
             List<HistoricalValue> historicalValueList= cryptocurrencyHistoricalValue.getHistoricalValues();
             for(HistoricalValue historicalValue: historicalValueList){
-                series.add(new Day(convertStringIntoDate(historicalValue.time)),historicalValue.value);
+                series.add(new FixedMillisecond(convertStringIntoDate(historicalValue.time)),historicalValue.value);
             }
         }
         return dataset;

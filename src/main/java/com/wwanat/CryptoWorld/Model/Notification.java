@@ -66,7 +66,7 @@ public class Notification {
         this.cryptocurrency = cryptocurrency;
     }
 
-    public User getNotifcationOwner() {
+    public User getNotificationOwner() {
         return notificationOwner;
     }
 
